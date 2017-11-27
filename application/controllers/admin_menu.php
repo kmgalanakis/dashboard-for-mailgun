@@ -8,8 +8,8 @@ class MailgunDashboard_Admin_Menu {
 
 	public function mailgun_dashboard_admin_menu() {
 		add_menu_page(
-			'Mailgun dashboard',
-			'Mailgun dashboard',
+			'Mailgun&#174; dashboard',
+			'Mailgun&#174; dashboard',
 			'manage_options',
 			'mailgun-dashboard',
 			array( $this, 'dashboard_page'),

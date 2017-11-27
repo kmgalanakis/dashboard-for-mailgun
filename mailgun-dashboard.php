@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Mailgun Dashboard
+Plugin Name: Mailgun&#174; Dashboard
 Plugin URI: https://wordpress.org/plugins/mailgun-dashboard/
-Description: Mailgun Dashboard for WordPress
+Description: Mailgun&#174; Dashboard for WordPress
 Version: 0.1
 Author: Konstantinos Galanakis
 Author URI: https://github.com/kmgalanakis
