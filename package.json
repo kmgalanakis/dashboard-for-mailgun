@@ -1,0 +1,23 @@
+{
+  "name": "mailgun-dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "chart.js": "^2.7.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmgalanakis/mailgun-dashboard.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kmgalanakis/mailgun-dashboard/issues"
+  },
+  "homepage": "https://github.com/kmgalanakis/mailgun-dashboard#readme"
+}

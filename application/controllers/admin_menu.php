@@ -2,8 +2,12 @@
 
 class MailgunDashboard_Admin_Menu {
 
+	protected $dashboard_page = null;
+
 	public function initialize() {
 		add_action( 'admin_menu', array( $this, 'mailgun_dashboard_admin_menu' ) );
+
+		$this->dashboard_page = new MailgunDashboard_Dashboard();
 	}
 
 	public function mailgun_dashboard_admin_menu() {
@@ -12,7 +16,7 @@ class MailgunDashboard_Admin_Menu {
 			'Mailgun&#174; dashboard',
 			'manage_options',
 			'mailgun-dashboard',
-			array( $this, 'dashboard_page'),
+			array( $this->dashboard_page, 'render_page'),
 			'dashicons-chart-area',
 			6
 		);
@@ -23,7 +27,7 @@ class MailgunDashboard_Admin_Menu {
 			'Dashboard',
 			'manage_options',
 			'mailgun-dashboard',
-			array( $this, 'dashboard_page')
+			array( $this->dashboard_page, 'render_page')
 		);
 
 		add_submenu_page(
@@ -36,9 +40,9 @@ class MailgunDashboard_Admin_Menu {
 		);
 	}
 
-	public function dashboard_page() {
-		echo '<h1>Dashboard</h1>';
-	}
+//	public function dashboard_page() {
+//		echo '<h1>Dashboard</h1>';
+//	}
 
 	public function settings_page() {
 		echo '<h1>Settings</h1>';

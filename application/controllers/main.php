@@ -12,6 +12,10 @@ class MailgunDashboard_Main {
 		add_action( 'init', array( $this, 'register_autoloaded_classes' ) );
 
 		add_action( 'init', array( $this, 'initialize_classes' ) );
+
+		add_action( 'init', array( $this, 'register_assets' ) );
+
+		add_action( 'init', array( $this, 'enqueue_assets' ) );
 	}
 
 	public function load_class_autoloader() {
@@ -29,5 +33,19 @@ class MailgunDashboard_Main {
 		$classmap = include( MAILGUN_DASHBOARD_PATH . '/application/autoload_classmap.php' );
 
 		do_action( 'mailgun_dashboard_register_classmap', $classmap );
+	}
+
+	public function register_assets() {
+		wp_register_script(
+			'mailgun_dashboard_chart_js',
+			MAILGUN_DASHBOARD_URL . '/node_modules/chart.js/dist/Chart.js',
+			array(),
+			MAILGUN_DASHBOARD_VERSION,
+			false
+		);
+	}
+
+	public function enqueue_assets() {
+		wp_enqueue_script( 'mailgun_dashboard_chart_js' );
 	}
 }
