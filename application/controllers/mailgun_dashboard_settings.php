@@ -1,6 +1,8 @@
 <?php
 
-class MailgunDashboard_Settings {
+namespace Controllers;
+
+class Mailgun_Dashboard_Settings {
 
 	const MAILGUN_DASHBOARD_API_KEY_OPTION_NAME = 'mailgun_api_key';
 	const MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME = 'mailgun_domain';

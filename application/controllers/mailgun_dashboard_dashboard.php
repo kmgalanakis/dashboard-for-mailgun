@@ -1,6 +1,10 @@
 <?php
 
-class MailgunDashboard_Dashboard {
+namespace Controllers;
+
+use \Controllers\Mailgun_Dashboard_Settings;
+
+class Mailgun_Dashboard_Dashboard {
 
 	public function render_page() {
 		$api_data = $this->get_API_data();
@@ -10,8 +14,8 @@ class MailgunDashboard_Dashboard {
 	}
 
 	public function get_API_data() {
-		$api_key = get_option( MailgunDashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME );
-		$domain = get_option( MailgunDashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME );
+		$api_key = get_option( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME );
+		$domain = get_option( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME );
 
 		if (
 			isset( $api_key )

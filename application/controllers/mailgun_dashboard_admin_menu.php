@@ -1,6 +1,11 @@
 <?php
 
-class MailgunDashboard_Admin_Menu {
+namespace Controllers;
+
+use \Controllers\Mailgun_Dashboard_Dashboard;
+use \Controllers\Mailgun_Dashboard_Settings;
+
+class Mailgun_Dashboard_Admin_Menu {
 
 	protected $dashboard_page = null;
 	protected $settings_page = null;
@@ -8,11 +13,11 @@ class MailgunDashboard_Admin_Menu {
 	public function initialize() {
 		add_action( 'admin_menu', array( $this, 'mailgun_dashboard_admin_menu' ) );
 
-		$this->dashboard_page = new MailgunDashboard_Dashboard();
+		$this->dashboard_page = new Mailgun_Dashboard_Dashboard();
 
-		$this->settings_page = new MailgunDashboard_Settings();
+		$this->settings_page = new Mailgun_Dashboard_Settings();
+
 		$this->settings_page->initialize();
-
 	}
 
 	public function mailgun_dashboard_admin_menu() {

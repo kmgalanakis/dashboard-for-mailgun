@@ -1,0 +1,25 @@
+{
+    "name": "kmgalanakis/mailgun-dashboard",
+    "type": "wordpress-plugin",
+    "description": "",
+    "keywords": [
+      "mailgun",
+      "dashboard",
+      "wordpress"
+    ],
+    "homepage": "https://github.com/kmgalanakis/mailgun-dashboard",
+    "authors": [
+        {
+            "name": "Konstantinos Galanakis",
+            "email": "kmgalanakis@gmail.com"
+        }
+    ],
+    "require": {
+      "php": ">=5.3"
+    },
+    "autoload": {
+      "psr-4": {
+        "Controllers\\" : "application/controllers/"
+      }
+    }
+}
