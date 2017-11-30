@@ -10,9 +10,21 @@ class MailgunDashboard_Dashboard {
 	}
 
 	public function get_API_data() {
-		// WordPress HTTP API
-		$response = wp_remote_get( 'xxx' );
-		$body = wp_remote_retrieve_body( $response );
-		return json_decode( $body );
+		$api_key = get_option( MailgunDashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME );
+		$domain = get_option( MailgunDashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME );
+
+		if (
+			isset( $api_key )
+			&& isset( $domain )
+		) {
+			$url = 'https://api:' . $api_key . '@' . 'api.mailgun.net' . '/v3/' . $domain . '/log';
+			$response = wp_remote_get( $url );
+			$body = wp_remote_retrieve_body( $response );
+			return json_decode( $body );
+		} else {
+			return null;
+		}
+
+
 	}
 }

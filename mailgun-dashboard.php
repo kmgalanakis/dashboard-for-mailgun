@@ -32,3 +32,4 @@ define( 'MAILGUN_DASHBOARD_VIEWS_PATH', dirname( __FILE__ ) . '/application/view
 define( 'MAILGUN_DASHBOARD_CONTEXT', 'mailgun-dashboard' );
 
 require_once MAILGUN_DASHBOARD_PATH . '/application/bootstrap.php';
+
