@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use \Controllers\Mailgun_Dashboard_Admin_Menu;
+use \Controllers\Mailgun_Dashboard_Dashboard;
 
 class Mailgun_Dashboard_Main {
 
@@ -15,7 +16,7 @@ class Mailgun_Dashboard_Main {
 
 		add_action( 'init', array( $this, 'register_assets' ) );
 
-		add_action( 'init', array( $this, 'enqueue_assets' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 	}
 
 	public function initialize_classes() {

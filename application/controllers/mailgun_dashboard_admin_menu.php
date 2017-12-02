@@ -14,6 +14,7 @@ class Mailgun_Dashboard_Admin_Menu {
 		add_action( 'admin_menu', array( $this, 'mailgun_dashboard_admin_menu' ) );
 
 		$this->dashboard_page = new Mailgun_Dashboard_Dashboard();
+		$this->dashboard_page->initialize();
 
 		$this->settings_page = new Mailgun_Dashboard_Settings();
 

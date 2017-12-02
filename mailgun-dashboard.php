@@ -13,10 +13,10 @@ Domain Path: /languages
 if (
 	defined( 'MAILGUN_DASHBOARD_VERSION' )
 	|| ! is_admin()
-	|| (
-		defined( 'DOING_AJAX' )
-		&& DOING_AJAX
-	)
+//	|| (
+//		defined( 'DOING_AJAX' )
+//		&& DOING_AJAX
+//	)
 ) {
 	return;
 }
@@ -32,4 +32,3 @@ define( 'MAILGUN_DASHBOARD_VIEWS_PATH', dirname( __FILE__ ) . '/application/view
 define( 'MAILGUN_DASHBOARD_CONTEXT', 'mailgun-dashboard' );
 
 require_once MAILGUN_DASHBOARD_PATH . '/application/bootstrap.php';
-
