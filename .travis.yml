@@ -1,0 +1,15 @@
+language: php
+    
+deploy:
+  skip_cleanup: true
+  
+jobs:
+  include:
+    - stage: test
+      script:
+        - composer install || exit 1
+        - npm install || exit 1
+    - stage: deploy
+      script:
+        - composer install || exit 1
+        - npm install || exit 1
