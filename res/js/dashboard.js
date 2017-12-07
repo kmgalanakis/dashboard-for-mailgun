@@ -34,8 +34,18 @@ var MailgunDashboard_Dashboard = function( $ ) {
                             'columnDefs': [
                                 {
                                     'targets': [0, 2],
-                                    'orderable': false
+                                    'orderable': false,
                                 },
+                                {
+                                    'type': 'date',
+                                    'targets': [1],
+                                },
+                            ],
+                            bAutoWidth: false ,
+                            aoColumns : [
+                                { sWidth: '2%' },
+                                { sWidth: '15%' },
+                                { sWidth: '73%' },
                             ],
                             'language' : {
                                 'decimal': mailgun_dashboard_dashboard_texts.decimal,

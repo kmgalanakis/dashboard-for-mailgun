@@ -28,3 +28,7 @@
 #mgd-log-table tr td.status.error {
     background-color: #c40022;
 }
+
+#mgd-log-table tr td.status.warn {
+    background-color: #ff9d00;
+}

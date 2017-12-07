@@ -66,7 +66,11 @@ class Mailgun_Dashboard_Dashboard {
 			'previous' => __( 'Previous', MAILGUN_DASHBOARD_CONTEXT ),
 			'sortAscending' => ':activatetosortcolumnascending',
 			'sortDescending' => ':activatetosortcolumndescending',
-			'eventStatus' => array( 'info' => __( 'Info', MAILGUN_DASHBOARD_CONTEXT ), 'error' => __( 'Error', MAILGUN_DASHBOARD_CONTEXT ) ),
+			'eventStatus' => array(
+				'info' => __( 'Info', MAILGUN_DASHBOARD_CONTEXT ),
+				'error' => __( 'Error', MAILGUN_DASHBOARD_CONTEXT ),
+				'warn' => __( 'Warning', MAILGUN_DASHBOARD_CONTEXT ),
+			),
 		);
 		//@codingStandardsIgnoreEnd
 
@@ -107,7 +111,19 @@ class Mailgun_Dashboard_Dashboard {
 			}
 			$data = wp_remote_retrieve_body( $response );
 
-			wp_send_json_success( $data );
+			$decoded_data = json_decode( $data );
+
+			$items = array_map(
+				function( $item ) {
+					$item->created_at = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $item->created_at ) + get_option( 'gmt_offset' ) * HOUR_IN_SECONDS );
+					return $item;
+				},
+				$decoded_data->items
+			);
+
+			$decoded_data->items = $items;
+
+			wp_send_json_success( json_encode( $decoded_data ) );
 		} else {
 			wp_send_json_error( 'Mailgun API key or domain, not set.' );
 		}
