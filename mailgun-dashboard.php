@@ -1,23 +1,18 @@
 <?php
-/*
-Plugin Name: Mailgun&#174; Dashboard
-Plugin URI: https://wordpress.org/plugins/mailgun-dashboard/
-Description: Mailgun&#174; Dashboard for WordPress
-Version: 0.1
-Author: Konstantinos Galanakis
-Author URI: https://github.com/kmgalanakis
-Text Domain: mailgun-dashboard
-Domain Path: /languages
-*/
+/**
+ * Plugin Name: Mailgun&#174; Dashboard
+ * Plugin URI: https://wordpress.org/plugins/mailgun-dashboard/
+ * Description: Mailgun&#174; Dashboard for WordPress
+ * Version: 0.1
+ * Author: Konstantinos Galanakis
+ * Author URI: https://github.com/kmgalanakis
+ * Text Domain: mailgun-dashboard
+ * Domain Path: /languages
+ *
+ * @package mailgun-dashboard
+ */
 
-if (
-	defined( 'MAILGUN_DASHBOARD_VERSION' )
-	|| ! is_admin()
-//	|| (
-//		defined( 'DOING_AJAX' )
-//		&& DOING_AJAX
-//	)
-) {
+if ( defined( 'MAILGUN_DASHBOARD_VERSION' ) || ! is_admin() ) {
 	return;
 }
 

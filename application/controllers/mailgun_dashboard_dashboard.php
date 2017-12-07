@@ -1,11 +1,22 @@
-<?php
+<?php // @codingStandardsIgnoreLine
 
 namespace Controllers;
 
 use \Controllers\Mailgun_Dashboard_Settings;
 use \Controllers\Mailgun_Dashboard_Main;
 
+/**
+ * "Mailgun Dashboard" plugin's dashboard page class.
+ *
+ * @category Class
+ * @package  mailgun-dashboard
+ * @author   Konstantinos Galanakis
+ */
 class Mailgun_Dashboard_Dashboard {
+
+	/**
+	 * Initialize "Mailgun Dashboard" plugin's dashboard page.
+	 */
 	public function initialize() {
 
 		add_action( 'wp_ajax_mgd_get_mailgun_log', array( $this, 'mgd_get_mailgun_log' ) );
@@ -15,19 +26,27 @@ class Mailgun_Dashboard_Dashboard {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 	}
 
+	/**
+	 * "Mailgun Dashboard" plugin's dashboard menu page callback.
+	 */
 	public function render_page() {
 		ob_start();
 		include( MAILGUN_DASHBOARD_VIEWS_PATH . '/dashboard.phtml' );
 		echo ob_get_clean();
 	}
 
+	/**
+	 * Register "Mailgun Dashboard" plugin's dashboard assets.
+	 */
 	public function register_assets() {
 		wp_register_script( 'dashboard-js',
 			MAILGUN_DASHBOARD_URL . '/res/js/dashboard.js',
 			array( 'jquery' ),
 			MAILGUN_DASHBOARD_VERSION,
-			true );
+			true
+		);
 
+		//@codingStandardsIgnoreStart
 		$dashboard_script_texts = array(
 			'decimal' => '',
 			'emptyTable' => __( 'No data available in table', MAILGUN_DASHBOARD_CONTEXT ),
@@ -49,6 +68,8 @@ class Mailgun_Dashboard_Dashboard {
 			'sortDescending' => ':activatetosortcolumndescending',
 			'eventStatus' => array( 'info' => __( 'Info', MAILGUN_DASHBOARD_CONTEXT ), 'error' => __( 'Error', MAILGUN_DASHBOARD_CONTEXT ) ),
 		);
+		//@codingStandardsIgnoreEnd
+
 		wp_localize_script(
 			'dashboard-js',
 			'mailgun_dashboard_dashboard_texts',
@@ -56,12 +77,19 @@ class Mailgun_Dashboard_Dashboard {
 		);
 	}
 
+	/**
+	 * Enqueue "Mailgun Dashboard" plugin's dashboard assets.
+	 */
 	public function enqueue_assets() {
 		wp_enqueue_script( 'dashboard-js' );
 	}
 
+	/**
+	 * Load log data from Mailgun's API.
+	 */
 	public function mgd_get_mailgun_log() {
 		$api_key = get_option( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME );
+
 		$domain = get_option( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME );
 
 		if (
@@ -69,10 +97,12 @@ class Mailgun_Dashboard_Dashboard {
 			&& isset( $domain )
 		) {
 			$url = sprintf( Mailgun_Dashboard_Main::MAILGUN_API_URL, $api_key, $domain );
+
 			$endpoint = '/log';
+
 			$response = wp_remote_get( $url . $endpoint );
 
-			if( is_wp_error( $response ) ) {
+			if ( is_wp_error( $response ) ) {
 				wp_send_json_error( 'Remote request failed.' );
 			}
 			$data = wp_remote_retrieve_body( $response );

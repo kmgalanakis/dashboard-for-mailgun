@@ -1,18 +1,31 @@
-<?php
+<?php // @codingStandardsIgnoreLine
 
 namespace Controllers;
 
 use \Controllers\Mailgun_Dashboard_Admin_Menu;
 use \Controllers\Mailgun_Dashboard_Dashboard;
 
+/**
+ * "Mailgun Dashboard" plugin's main class.
+ *
+ * @category Class
+ * @package  mailgun-dashboard
+ * @author   Konstantinos Galanakis
+ */
 class Mailgun_Dashboard_Main {
 
 	const MAILGUN_API_URL = 'https://api:%s@api.mailgun.net/v3/%s';
 
+	/**
+	 * "Mailgun Dashboard" plugin's main class initialization.
+	 */
 	public function initialize() {
 		$this->add_hooks();
 	}
 
+	/**
+	 * "Mailgun Dashboard" plugin's main class hooks initialization.
+	 */
 	public function add_hooks() {
 		add_action( 'init', array( $this, 'initialize_classes' ) );
 
@@ -21,11 +34,17 @@ class Mailgun_Dashboard_Main {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 	}
 
+	/**
+	 * "Mailgun Dashboard" plugin's various secondary classes initialization.
+	 */
 	public function initialize_classes() {
 		$mgd_admin_menu = new Mailgun_Dashboard_Admin_Menu();
 		$mgd_admin_menu->initialize();
 	}
 
+	/**
+	 * "Mailgun Dashboard" plugin's main class assets registration.
+	 */
 	public function register_assets() {
 		wp_register_script(
 			'mailgun_dashboard_chart_js',
@@ -58,6 +77,9 @@ class Mailgun_Dashboard_Main {
 		);
 	}
 
+	/**
+	 * "Mailgun Dashboard" plugin's main class assets enqueueing.
+	 */
 	public function enqueue_assets() {
 		wp_enqueue_script( 'mailgun_dashboard_chart_js' );
 
