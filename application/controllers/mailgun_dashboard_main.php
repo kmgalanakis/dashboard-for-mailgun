@@ -7,6 +7,8 @@ use \Controllers\Mailgun_Dashboard_Dashboard;
 
 class Mailgun_Dashboard_Main {
 
+	const MAILGUN_API_URL = 'https://api:%s@api.mailgun.net/v3/%s';
+
 	public function initialize() {
 		$this->add_hooks();
 	}
@@ -32,9 +34,37 @@ class Mailgun_Dashboard_Main {
 			MAILGUN_DASHBOARD_VERSION,
 			false
 		);
+
+		wp_register_script(
+			'mailgun_dashboard_datatables_js',
+			MAILGUN_DASHBOARD_URL . '/node_modules/datatables.net/js/jquery.dataTables.js',
+			array(),
+			MAILGUN_DASHBOARD_VERSION,
+			true
+		);
+
+		wp_register_style(
+			'mailgun_dashboard_datatables_css',
+			MAILGUN_DASHBOARD_URL . '/node_modules/datatables.net-dt/css/jquery.dataTables.css',
+			array(),
+			MAILGUN_DASHBOARD_VERSION
+		);
+
+		wp_register_style(
+			'mailgun_dashboard_css',
+			MAILGUN_DASHBOARD_URL . '/res/css/mailgun_dashboard.css',
+			array(),
+			MAILGUN_DASHBOARD_VERSION
+		);
 	}
 
 	public function enqueue_assets() {
 		wp_enqueue_script( 'mailgun_dashboard_chart_js' );
+
+		wp_enqueue_script( 'mailgun_dashboard_datatables_js' );
+
+		wp_enqueue_style( 'mailgun_dashboard_datatables_css' );
+
+		wp_enqueue_style( 'mailgun_dashboard_css' );
 	}
 }

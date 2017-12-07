@@ -1,0 +1,30 @@
+.mgd-loading-section .mgd-loading-content::before {
+    background: url( '../img/clouding-2x.gif' ) center center no-repeat;
+    background-size: auto 20px;
+    content: "";
+    display: block;
+    height: 20px;
+    width: 100%;
+    position: relative;
+    left: -5px;
+}
+
+.mgd-loading-section .mgd-loading-content {
+    color: #666;
+    font-size: 13px;
+    text-align: center;
+}
+
+#mgd-log-table-container {
+    display: none;
+}
+#mgd-log-table tr td.status {
+    width: 10px;
+}
+#mgd-log-table tr td.status.info {
+    background-color: #00a96d;
+}
+
+#mgd-log-table tr td.status.error {
+    background-color: #c40022;
+}

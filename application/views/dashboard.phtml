@@ -1,10 +1,27 @@
 <h1><?php echo __( 'Dashboard', MAILGUN_DASHBOARD_CONTEXT ); ?></h1>
 
-<pre>
-    <?php //print_r( $api_data ); ?>
-</pre>
+<div class="mgd-loading-section">
+    <div class="mgd-loading-content"><?php echo __( 'Loading', MAILGUN_DASHBOARD_CONTEXT ); ?>...</div>
+</div>
 
-<canvas id="myChart" width="400" height="400"></canvas>
-<script>
+<div id="mgd-log-table-container">
+    <table id="mgd-log-table" class="row-border hover" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th></th>
+                <th><?php echo __( 'Date/Time', MAILGUN_DASHBOARD_CONTEXT ); ?></th>
+                <th><?php echo __( 'Summary', MAILGUN_DASHBOARD_CONTEXT ); ?></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th></th>
+                <th><?php echo __( 'Date/Time', MAILGUN_DASHBOARD_CONTEXT ); ?></th>
+                <th><?php echo __( 'Summary', MAILGUN_DASHBOARD_CONTEXT ); ?></th>
+            </tr>
+        </tfoot>
+    </table>
 
-</script>
+</div>

@@ -2,19 +2,71 @@ var MailgunDashboard_Dashboard = function( $ ) {
 
     var self = this;
 
-    self.getMailgunAPIData = function() {
+    self.getMailgunLog = function() {
         var data = {
-            action:		'mgd_get_mailgun_log',
+            action:	'mgd_get_mailgun_log',
         };
 
-        $.ajax({
-            url:		ajaxurl,
-            data:		data,
-            type:		"POST",
-            dataType:	"json",
-            success:	function( response ) {
+        $.ajax( {
+            url: ajaxurl,
+            data: data,
+            type: 'POST',
+            dataType: 'json',
+            success: function( response ) {
                 if ( response.success ) {
-                    console.log( response );
+                    $.each( JSON.parse( response.data ).items, function( index, value ) {
+                        var newRow = '<tr>' +
+                                        '<td class="status ' + value.type + '" title="' + mailgun_dashboard_dashboard_texts.eventStatus[ value.type ] + '"></td>' +
+                                        '<td>' +
+                                            value.created_at +
+                                        '</td>' +
+                                        '<td>' +
+                                            value.message +
+                                        '</td>' +
+                                    '</tr>';
+                        $( '#mgd-log-table tbody' ).append( newRow );
+                    });
+
+                    $( '#mgd-log-table' ).DataTable(
+                        {
+                            'iDisplayLength': 25,
+                            'order': [[ 1, 'desc' ]],
+                            'columnDefs': [
+                                {
+                                    'targets': [0, 2],
+                                    'orderable': false
+                                },
+                            ],
+                            'language' : {
+                                'decimal': mailgun_dashboard_dashboard_texts.decimal,
+                                'emptyTable': mailgun_dashboard_dashboard_texts.emptyTable,
+                                'info': mailgun_dashboard_dashboard_texts.info,
+                                'infoEmpty': mailgun_dashboard_dashboard_texts.infoEmpty,
+                                'infoFiltered': mailgun_dashboard_dashboard_texts.infoFiltered,
+                                'infoPostFix': mailgun_dashboard_dashboard_texts.infoPostFix,
+                                'thousands': mailgun_dashboard_dashboard_texts.thousands,
+                                'lengthMenu': mailgun_dashboard_dashboard_texts.lengthMenu,
+                                'loadingRecords': mailgun_dashboard_dashboard_texts.loadingRecords,
+                                'processing': mailgun_dashboard_dashboard_texts.processing,
+                                'search': mailgun_dashboard_dashboard_texts.search,
+                                'zeroRecords': mailgun_dashboard_dashboard_texts.zeroRecords,
+                                'paginate': {
+                                    'first': mailgun_dashboard_dashboard_texts.first,
+                                    'last': mailgun_dashboard_dashboard_texts.last,
+                                    'next': mailgun_dashboard_dashboard_texts.next,
+                                    'previous': mailgun_dashboard_dashboard_texts.previous
+                                },
+                                'aria': {
+                                    'sortAscending': mailgun_dashboard_dashboard_texts.sortAscending,
+                                    'sortDescending': mailgun_dashboard_dashboard_texts.sortDescending,
+                                }
+                            }
+                        }
+                    );
+                    $( '.mgd-loading-section' ).fadeOut();
+                    $( '#mgd-log-table-container' ).fadeIn();
+                } else {
+                    alert( response.data );
                 }
             }
         });
@@ -61,8 +113,8 @@ var MailgunDashboard_Dashboard = function( $ ) {
     }
 
     self.init = function() {
-        self.getMailgunAPIData();
-        self.drawChart();
+        self.getMailgunLog();
+        // self.drawChart();
     };
 
     self.init();
