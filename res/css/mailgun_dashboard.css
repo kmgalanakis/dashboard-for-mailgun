@@ -15,7 +15,8 @@
     text-align: center;
 }
 
-#mgd-log-table-container {
+#mgd-log-table-container,
+#mgd-log-events-chart {
     display: none;
 }
 #mgd-log-table tr td.status {

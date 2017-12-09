@@ -16,10 +16,12 @@ class Mailgun_Dashboard_Dashboard {
 
 	/**
 	 * Initialize "Mailgun Dashboard" plugin's dashboard page.
+	 *
+	 * @since 0.1.0
 	 */
 	public function initialize() {
 
-		add_action( 'wp_ajax_mgd_get_mailgun_log', array( $this, 'mgd_get_mailgun_log' ) );
+		add_action( 'wp_ajax_mgd_get_mailgun_dashboard_api', array( $this, 'mgd_get_mailgun_dashboard_api' ) );
 
 		add_action( 'init', array( $this, 'register_assets' ), 11 );
 
@@ -28,6 +30,8 @@ class Mailgun_Dashboard_Dashboard {
 
 	/**
 	 * "Mailgun Dashboard" plugin's dashboard menu page callback.
+	 *
+	 * @since 0.1.0
 	 */
 	public function render_page() {
 		ob_start();
@@ -37,6 +41,8 @@ class Mailgun_Dashboard_Dashboard {
 
 	/**
 	 * Register "Mailgun Dashboard" plugin's dashboard assets.
+	 *
+	 * @since 0.1.0
 	 */
 	public function register_assets() {
 		wp_register_script( 'dashboard-js',
@@ -89,9 +95,11 @@ class Mailgun_Dashboard_Dashboard {
 	}
 
 	/**
-	 * Load log data from Mailgun's API.
+	 * Load Mailgun's API data.
+	 *
+	 * @since 0.1.0
 	 */
-	public function mgd_get_mailgun_log() {
+	public function mgd_get_mailgun_dashboard_api() {
 		$api_key = get_option( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME );
 
 		$domain = get_option( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME );
@@ -102,30 +110,76 @@ class Mailgun_Dashboard_Dashboard {
 		) {
 			$url = sprintf( Mailgun_Dashboard_Main::MAILGUN_API_URL, $api_key, $domain );
 
-			$endpoint = '/log';
+			$type = sanitize_text_field( $_POST['type'] );
 
-			$response = wp_remote_get( $url . $endpoint );
-
-			if ( is_wp_error( $response ) ) {
-				wp_send_json_error( 'Remote request failed.' );
+			switch ( $type ) {
+				case 'log':
+					$decoded_data = $this->mgd_get_mailgun_log( $url );
+					break;
+				case 'events':
+					$decoded_data = $this->mgd_get_mailgun_events( $url );
+					break;
 			}
-			$data = wp_remote_retrieve_body( $response );
-
-			$decoded_data = json_decode( $data );
-
-			$items = array_map(
-				function( $item ) {
-					$item->created_at = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $item->created_at ) + get_option( 'gmt_offset' ) * HOUR_IN_SECONDS );
-					return $item;
-				},
-				$decoded_data->items
-			);
-
-			$decoded_data->items = $items;
 
 			wp_send_json_success( json_encode( $decoded_data ) );
 		} else {
 			wp_send_json_error( 'Mailgun API key or domain, not set.' );
 		}
+	}
+
+	/**
+	 * Load log data from Mailgun's API.
+	 *
+	 * @param  string $url The authenticated API url.
+	 * @return array  The log data.
+	 *
+	 * @since 0.1.0
+	 */
+	public function mgd_get_mailgun_log( $url ) {
+		$endpoint = '/log';
+
+		$response = wp_remote_get( $url . $endpoint );
+
+		if ( is_wp_error( $response ) ) {
+			wp_send_json_error( 'Remote request failed.' );
+		}
+		$data = wp_remote_retrieve_body( $response );
+
+		$decoded_data = json_decode( $data );
+
+		$items = array_map(
+			function( $item ) {
+				$item->created_at = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $item->created_at ) + get_option( 'gmt_offset' ) * HOUR_IN_SECONDS );
+				return $item;
+			},
+			$decoded_data->items
+		);
+
+		$decoded_data->items = $items;
+
+		return $decoded_data;
+	}
+
+	/**
+	 * Load log events from Mailgun's API.
+	 *
+	 * @param  string $url The authenticated API url.
+	 * @return array  The events data.
+	 *
+	 * @since 0.1.0
+	 */
+	public function mgd_get_mailgun_events( $url ) {
+		$endpoint = '/events';
+
+		$response = wp_remote_get( $url . $endpoint );
+
+		if ( is_wp_error( $response ) ) {
+			wp_send_json_error( 'Remote request failed.' );
+		}
+		$data = wp_remote_retrieve_body( $response );
+
+		$decoded_data = json_decode( $data );
+
+		return $decoded_data;
 	}
 }
