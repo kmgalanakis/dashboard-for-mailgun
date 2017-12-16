@@ -21,7 +21,7 @@ var MailgunDashboard_Dashboard = function( $ ) {
                     $( '#mgd-log-events-chart' ).prev( '.mgd-loading-section' ).fadeOut();
                     $( '#mgd-log-events-chart' ).fadeIn();
                 } else {
-                    alert( response.data );
+                    self.consoleWarnErrors( response.data );
                 }
             }
         });
@@ -102,11 +102,17 @@ var MailgunDashboard_Dashboard = function( $ ) {
                     $( '#mgd-log-table-container' ).prev( '.mgd-loading-section' ).fadeOut();
                     $( '#mgd-log-table-container' ).fadeIn();
                 } else {
-                    alert( response.data );
+                    self.consoleWarnErrors( response.data );
                 }
             }
         });
-    }
+    };
+
+    self.consoleWarnErrors = function( data ) {
+        $.each( data, function( key, value ) {
+            console.warn( 'API Error: ' +  key + ' => ' + value );
+        });
+    };
 
     self.drawChart = function() {
         var barChartData = JSON.parse( '{"labels":["January","February","March","April","May","June","July"],"datasets":[{"label":"Dataset 1","backgroundColor":"rgb(255, 99, 132)","data":[80,-72,-72,81,96,27,54]},{"label":"Dataset 2","backgroundColor":"rgb(54, 162, 235)","data":[-3,-47,83,-86,-10,49,-70]},{"label":"Dataset 3","backgroundColor":"rgb(75, 192, 192)","data":[22,38,-70,-70,-69,-5,-1]}]}' );

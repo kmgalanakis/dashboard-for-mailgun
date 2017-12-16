@@ -31,6 +31,8 @@ class Mailgun_Dashboard_Main {
 
 		add_action( 'init', array( $this, 'register_assets' ) );
 
+		add_action( 'init', array( $this, 'delete_mailgun_settings_source_option' ) );
+
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 	}
 
@@ -88,5 +90,15 @@ class Mailgun_Dashboard_Main {
 		wp_enqueue_style( 'mailgun_dashboard_datatables_css' );
 
 		wp_enqueue_style( 'mailgun_dashboard_css' );
+	}
+
+	/**
+	 * "Mailgun Dashboard" plugin's method to remove the Mailgun source settings option from the database when
+	 * the Mailgun plugin is not activated.
+	 */
+	public function delete_mailgun_settings_source_option() {
+		if ( ! class_exists( 'Mailgun' ) ) {
+			delete_option( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME );
+		}
 	}
 }

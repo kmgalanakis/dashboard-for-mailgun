@@ -14,6 +14,8 @@ use \Controllers\Mailgun_Dashboard_Main;
  */
 class Mailgun_Dashboard_Dashboard {
 
+	const MAILGUN_DASHBOARD_DASHBOARD_PAGE_SCREEN_ID = 'toplevel_page_mailgun-dashboard';
+
 	/**
 	 * Initialize "Mailgun Dashboard" plugin's dashboard page.
 	 *
@@ -21,11 +23,11 @@ class Mailgun_Dashboard_Dashboard {
 	 */
 	public function initialize() {
 
-		add_action( 'wp_ajax_mgd_get_mailgun_dashboard_api', array( $this, 'mgd_get_mailgun_dashboard_api' ) );
-
 		add_action( 'init', array( $this, 'register_assets' ), 11 );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
+
+		add_action( 'wp_ajax_mgd_get_mailgun_dashboard_api', array( $this, 'mgd_get_mailgun_dashboard_api' ) );
 	}
 
 	/**
@@ -91,7 +93,9 @@ class Mailgun_Dashboard_Dashboard {
 	 * Enqueue "Mailgun Dashboard" plugin's dashboard assets.
 	 */
 	public function enqueue_assets() {
-		wp_enqueue_script( 'dashboard-js' );
+		if ( get_current_screen()->id === self::MAILGUN_DASHBOARD_DASHBOARD_PAGE_SCREEN_ID ) {
+			wp_enqueue_script( 'dashboard-js' );
+		}
 	}
 
 	/**
@@ -141,7 +145,7 @@ class Mailgun_Dashboard_Dashboard {
 		$response = wp_remote_get( $url . $endpoint );
 
 		if ( is_wp_error( $response ) ) {
-			wp_send_json_error( 'Remote request failed.' );
+			wp_send_json_error( $response->errors );
 		}
 		$data = wp_remote_retrieve_body( $response );
 
@@ -174,7 +178,7 @@ class Mailgun_Dashboard_Dashboard {
 		$response = wp_remote_get( $url . $endpoint );
 
 		if ( is_wp_error( $response ) ) {
-			wp_send_json_error( 'Remote request failed.' );
+			wp_send_json_error( $response->errors );
 		}
 		$data = wp_remote_retrieve_body( $response );
 

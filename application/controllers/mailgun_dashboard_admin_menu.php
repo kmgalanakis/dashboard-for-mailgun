@@ -47,8 +47,8 @@ class Mailgun_Dashboard_Admin_Menu {
 	 */
 	public function mailgun_dashboard_admin_menu() {
 		add_menu_page(
-			'Mailgun&#174; dashboard',
-			'Mailgun&#174; dashboard',
+			__( 'Mailgun&#174; dashboard', MAILGUN_DASHBOARD_CONTEXT ), // @codingStandardsIgnoreLine
+			__( 'Mailgun&#174; dashboard', MAILGUN_DASHBOARD_CONTEXT ), // @codingStandardsIgnoreLine
 			'manage_options',
 			'mailgun-dashboard',
 			array( $this->dashboard_page, 'render_page' ),
@@ -58,8 +58,8 @@ class Mailgun_Dashboard_Admin_Menu {
 
 		add_submenu_page(
 			'mailgun-dashboard',
-			'Dashboard',
-			'Dashboard',
+			__( 'Dashboard', MAILGUN_DASHBOARD_CONTEXT ), // @codingStandardsIgnoreLine
+			__( 'Dashboard', MAILGUN_DASHBOARD_CONTEXT ), // @codingStandardsIgnoreLine
 			'manage_options',
 			'mailgun-dashboard',
 			array( $this->dashboard_page, 'render_page' )
@@ -67,8 +67,8 @@ class Mailgun_Dashboard_Admin_Menu {
 
 		add_submenu_page(
 			'mailgun-dashboard',
-			'Mailgun&#174; Dashboard Settings',
-			'Settings',
+			__( 'Mailgun&#174; Dashboard Settings', MAILGUN_DASHBOARD_CONTEXT ), // @codingStandardsIgnoreLine
+			__( 'Settings', MAILGUN_DASHBOARD_CONTEXT ), // @codingStandardsIgnoreLine
 			'manage_options',
 			'mailgun-dashboard-settings',
 			array( $this->settings_page, 'render_page' )
