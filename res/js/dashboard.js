@@ -16,16 +16,18 @@ var MailgunDashboard_Dashboard = function( $ ) {
             type: 'POST',
             dataType: 'json',
             success: function( response ) {
+                var eventsTableContainer = $( '#mgd-log-events-chart' );
                 if ( response.success ) {
-                    // console.log( JSON.parse( response.data ) );
-                    $( '#mgd-log-events-chart' ).prev( '.mgd-loading-section' ).fadeOut();
-                    $( '#mgd-log-events-chart' ).fadeIn();
+                    eventsTableContainer.fadeIn();
+
+                    $( '.js-mgd-refresh-dashboard' ).fadeIn();
                 } else {
                     self.consoleWarnErrors( response.data );
                 }
+                eventsTableContainer.prev( '.mgd-loading-section' ).fadeOut();
             }
         });
-    }
+    };
 
     self.getMailgunLog = function() {
         var data = {
@@ -39,7 +41,13 @@ var MailgunDashboard_Dashboard = function( $ ) {
             type: 'POST',
             dataType: 'json',
             success: function( response ) {
+                var logTableContainer = $( '#mgd-log-table-container' );
                 if ( response.success ) {
+                    var logTable = $( '#mgd-log-table' );
+                    var logTableBody = $( '#mgd-log-table tbody' );
+                    logTable.DataTable().destroy();
+                    logTableBody.empty();
+
                     $.each( JSON.parse( response.data ).items, function( index, value ) {
                         var newRow = '<tr>' +
                                         '<td class="status ' + value.type + '" title="' + mailgun_dashboard_dashboard_texts.eventStatus[ value.type ] + '"></td>' +
@@ -50,28 +58,28 @@ var MailgunDashboard_Dashboard = function( $ ) {
                                             value.message +
                                         '</td>' +
                                     '</tr>';
-                        $( '#mgd-log-table tbody' ).append( newRow );
+                        logTableBody.append( newRow );
                     });
 
-                    $( '#mgd-log-table' ).DataTable(
+                    logTable.DataTable(
                         {
                             'iDisplayLength': 25,
                             'order': [[ 1, 'desc' ]],
                             'columnDefs': [
                                 {
                                     'targets': [0, 2],
-                                    'orderable': false,
+                                    'orderable': false
                                 },
                                 {
                                     'type': 'date',
-                                    'targets': [1],
-                                },
+                                    'targets': [1]
+                                }
                             ],
                             bAutoWidth: false ,
                             aoColumns : [
                                 { sWidth: '1%' },
                                 { sWidth: '15%' },
-                                { sWidth: '73%' },
+                                { sWidth: '73%' }
                             ],
                             'language' : {
                                 'decimal': mailgun_dashboard_dashboard_texts.decimal,
@@ -94,23 +102,28 @@ var MailgunDashboard_Dashboard = function( $ ) {
                                 },
                                 'aria': {
                                     'sortAscending': mailgun_dashboard_dashboard_texts.sortAscending,
-                                    'sortDescending': mailgun_dashboard_dashboard_texts.sortDescending,
+                                    'sortDescending': mailgun_dashboard_dashboard_texts.sortDescending
                                 }
                             }
                         }
                     );
-                    $( '#mgd-log-table-container' ).prev( '.mgd-loading-section' ).fadeOut();
-                    $( '#mgd-log-table-container' ).fadeIn();
+
+                    logTableContainer.fadeIn();
+
+                    $( '.js-mgd-refresh-dashboard' ).fadeIn();
                 } else {
                     self.consoleWarnErrors( response.data );
                 }
+
+                logTableContainer.prev( '.mgd-loading-section' ).fadeOut();
             }
         });
     };
 
     self.consoleWarnErrors = function( data ) {
         $.each( data, function( key, value ) {
-            console.warn( 'API Error: ' +  key + ' => ' + value );
+            alert( mailgun_dashboard_dashboard_texts.mailgun_api_failed + '!' + '\n' + mailgun_dashboard_dashboard_texts.console_for_info + '.' );
+            console.warn( mailgun_dashboard_dashboard_texts.mailgun_api_error + ': ' +  key + ' => ' + value );
         });
     };
 
@@ -132,7 +145,7 @@ var MailgunDashboard_Dashboard = function( $ ) {
                 responsive: true,
                 scales: {
                     xAxes: [{
-                        stacked: true,
+                        stacked: true
                     }],
                     yAxes: [{
                         stacked: true
@@ -140,17 +153,32 @@ var MailgunDashboard_Dashboard = function( $ ) {
                 }
             }
         });
-    }
+    };
+
+    $( document ).on( 'click', '.js-mgd-refresh-dashboard-button', function() {
+        var eventsTableContainer = $( '#mgd-log-events-chart' );
+        eventsTableContainer.prev( '.mgd-loading-section' ).fadeIn();
+        eventsTableContainer.fadeOut();
+
+        var logTableContainer = $( '#mgd-log-table-container' );
+        logTableContainer.prev( '.mgd-loading-section' ).fadeIn();
+        logTableContainer.fadeOut();
+
+        $( '.js-mgd-refresh-dashboard') .fadeOut();
+
+        self.getMailgunLog();
+        self.getMailgunEvents();
+    });
 
     self.init = function() {
         self.getMailgunEvents();
         self.getMailgunLog();
-        // self.drawChart();
+        self.drawChart();
     };
 
     self.init();
 
-}
+};
 
 jQuery( document ).ready( function( $ ) {
     var dashboardInstance = new MailgunDashboard_Dashboard( $ );

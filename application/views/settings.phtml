@@ -1,29 +1,87 @@
 <?php
 use \Controllers\Mailgun_Dashboard_Settings;
+
+$defaults = array(
+	Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME => '',
+	Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME => '',
+	Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME => '',
+);
+
+$mailgun_dashboard_settings = wp_parse_args( get_option( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_OPTION_NAME ), $defaults );
 ?>
 
-<h1><?php echo __( 'Mailgun&#174; Dashboard Settings', MAILGUN_DASHBOARD_CONTEXT ); ?></h1>
+<h1><?php echo esc_html( __( 'Mailgun&#174; Dashboard Settings', MAILGUN_DASHBOARD_CONTEXT ) ); ?></h1>
 
 <form method="post" action="options.php">
     <?php echo settings_fields( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_OPTIONS_GROUP ); ?>
         <table class="form-table">
             <tbody>
                 <tr valign="top">
-                    <th scope="row"><label for="<?php echo Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME; ?>"><?php echo __( 'Mailgun API key', MAILGUN_DASHBOARD_CONTEXT ); ?></label></th>
-                    <td><input type="text" id="<?php echo Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME; ?>" name="<?php echo Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME; ?>" value="<?php echo get_option( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME ); ?>" class="regular-text js-mgd-<?php echo Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME; ?>"/></td>
+                    <th scope="row">
+                        <label for="<?php echo esc_attr( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME ); ?>">
+                            <?php echo esc_html( __( 'Mailgun domain', MAILGUN_DASHBOARD_CONTEXT ) ); ?>
+                        </label>
+                    </th>
+                    <td>
+                        <?php
+                        echo sprintf(
+                                '<input type="%s" id="%s" name="%s" value="%s" class="%s" />',
+                                esc_attr( 'text' ),
+                                esc_attr( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME ),
+                                esc_attr( 'mailgun_dashboard[' . Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME . ']' ),
+	                            esc_attr( $mailgun_dashboard_settings[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME ] ),
+	                            esc_attr( 'regular-text  js-mgd-' . Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME )
+                        );
+                        ?>
+                    </td>
                 </tr>
 
                 <tr valign="top">
-                    <th scope="row"><label for="<?php echo Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME; ?>"><?php echo __( 'Mailgun domain', MAILGUN_DASHBOARD_CONTEXT ); ?></label></th>
-                    <td><input type="text" id="<?php echo Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME; ?>" name="<?php echo Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME; ?>" value="<?php echo get_option( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME ); ?>" class="regular-text  js-mgd-<?php echo Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME; ?>"/></td>
+                    <th scope="row">
+                        <label for="<?php echo esc_attr( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME ); ?>">
+                            <?php echo esc_html( __( 'Mailgun API key', MAILGUN_DASHBOARD_CONTEXT ) ); ?>
+                        </label>
+                    </th>
+                    <td>
+	                    <?php
+	                    echo sprintf(
+		                    '<input type="%s" id="%s" name="%s" value="%s" class="%s" />',
+		                    esc_attr( 'text' ),
+		                    esc_attr( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME ),
+		                    esc_attr( 'mailgun_dashboard[' . Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME . ']' ),
+		                    esc_attr( $mailgun_dashboard_settings[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME ] ),
+		                    esc_attr( 'regular-text  js-mgd-' . Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME )
+	                    );
+	                    ?>
+                    </td>
                 </tr>
+
                 <?php
                 if ( class_exists( 'Mailgun' ) ):
                 ?>
+
                 <tr valign="top">
-                    <th scope="row"><label for="<?php echo Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME; ?>"><?php echo __( 'Use the settings from Mailgun&#174; plugin', MAILGUN_DASHBOARD_CONTEXT ); ?></label></th>
-                    <td><input type="checkbox" id="<?php echo Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME; ?>" name="<?php echo Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME; ?>" value="1" <?php echo '1' === get_option( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME ) ? 'checked' : ''  ?> class="js-mgd-mailgun_settings_source"></td>
+                    <th scope="row">
+                        <label for="<?php echo esc_attr( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME ); ?>">
+                            <?php echo esc_html( __( 'Use the settings from Mailgun&#174; plugin', MAILGUN_DASHBOARD_CONTEXT ) ); ?>
+                        </label>
+                    </th>
+                    <td>
+	                    <?php
+	                    $checked = '1' === $mailgun_dashboard_settings[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME ] ? 'checked' : '';
+	                    echo sprintf(
+	                            '<input type="%s" id="%s" name="%s" value="%s" class="%s" %s />',
+                                esc_attr( 'checkbox' ),
+                                esc_attr( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME ),
+                                esc_attr( 'mailgun_dashboard[' . Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME . ']' ),
+                                esc_attr( '1' ),
+                                esc_attr( 'js-mgd-mailgun_settings_source' ),
+                                esc_attr( $checked )
+                        );
+	                    ?>
+                    </td>
                 </tr>
+
                 <?php
                 endif;
                 ?>

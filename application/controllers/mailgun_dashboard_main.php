@@ -98,7 +98,9 @@ class Mailgun_Dashboard_Main {
 	 */
 	public function delete_mailgun_settings_source_option() {
 		if ( ! class_exists( 'Mailgun' ) ) {
-			delete_option( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME );
+			$mailgun_dashboard_settings = get_option( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_OPTION_NAME );
+			unset( $mailgun_dashboard_settings[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME ] );
+			update_option( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_OPTION_NAME, $mailgun_dashboard_settings );
 		}
 	}
 }

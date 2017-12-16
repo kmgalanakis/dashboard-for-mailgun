@@ -33,3 +33,9 @@
 #mgd-log-table tr td.status.warn {
     background-color: #ff9d00;
 }
+
+.mgd-refresh-dashboard {
+    display: none;
+    float: right;
+    margin: 10px 15px;
+}

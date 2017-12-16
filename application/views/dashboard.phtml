@@ -1,7 +1,12 @@
-<h1><?php echo __( 'Dashboard', MAILGUN_DASHBOARD_CONTEXT ); ?></h1>
+<h1><?php echo esc_html( __( 'Dashboard', MAILGUN_DASHBOARD_CONTEXT ) ); ?></h1>
+
+<div class="mgd-refresh-dashboard js-mgd-refresh-dashboard">
+    <button class="button button-primary js-mgd-refresh-dashboard-button"><?php echo esc_html( __( 'Refresh dashboard', MAILGUN_DASHBOARD_CONTEXT ) ); ?></button>
+</div>
+<div class="clear"></div>
 
 <div class="mgd-loading-section">
-    <div class="mgd-loading-content"><?php echo __( 'Loading', MAILGUN_DASHBOARD_CONTEXT ); ?>...</div>
+    <div class="mgd-loading-content"><?php echo esc_html( __( 'Loading', MAILGUN_DASHBOARD_CONTEXT ) ); ?>...</div>
 </div>
 
 <div id="mgd-log-events-chart">
@@ -11,7 +16,7 @@
 <hr />
 
 <div class="mgd-loading-section">
-    <div class="mgd-loading-content"><?php echo __( 'Loading', MAILGUN_DASHBOARD_CONTEXT ); ?>...</div>
+    <div class="mgd-loading-content"><?php echo esc_html( __( 'Loading', MAILGUN_DASHBOARD_CONTEXT ) ); ?>...</div>
 </div>
 
 <div id="mgd-log-table-container">
@@ -19,8 +24,8 @@
         <thead>
             <tr>
                 <th></th>
-                <th><?php echo __( 'Date/Time', MAILGUN_DASHBOARD_CONTEXT ); ?></th>
-                <th><?php echo __( 'Summary', MAILGUN_DASHBOARD_CONTEXT ); ?></th>
+                <th><?php echo esc_html( __( 'Date/Time', MAILGUN_DASHBOARD_CONTEXT ) ); ?></th>
+                <th><?php echo esc_html( __( 'Summary', MAILGUN_DASHBOARD_CONTEXT ) ); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -28,10 +33,14 @@
         <tfoot>
             <tr>
                 <th></th>
-                <th><?php echo __( 'Date/Time', MAILGUN_DASHBOARD_CONTEXT ); ?></th>
-                <th><?php echo __( 'Summary', MAILGUN_DASHBOARD_CONTEXT ); ?></th>
+                <th><?php echo esc_html( __( 'Date/Time', MAILGUN_DASHBOARD_CONTEXT ) ); ?></th>
+                <th><?php echo esc_html( __( 'Summary', MAILGUN_DASHBOARD_CONTEXT ) ); ?></th>
             </tr>
         </tfoot>
     </table>
-
 </div>
+
+<div class="mgd-refresh-dashboard js-mgd-refresh-dashboard">
+    <button class="button button-primary js-mgd-refresh-dashboard-button"><?php echo esc_html( __( 'Refresh dashboard', MAILGUN_DASHBOARD_CONTEXT ) ); ?></button>
+</div>
+<div class="clear"></div>
