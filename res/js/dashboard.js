@@ -16,15 +16,46 @@ var MailgunDashboard_Dashboard = function( $ ) {
             type: 'POST',
             dataType: 'json',
             success: function( response ) {
-                var eventsTableContainer = $( '#mgd-log-events-chart' );
+                var statsTableContainer = $( '#mgd-log-events-chart' );
                 if ( response.success ) {
-                    eventsTableContainer.fadeIn();
-
+                    statsTableContainer.fadeIn();
                     $( '.js-mgd-refresh-dashboard' ).fadeIn();
+                } else {
+                    // self.consoleWarnErrors( response.data );
+                }
+                statsTableContainer.prev( '.mgd-loading-section' ).fadeOut();
+            }
+        });
+    };
+
+    self.getMailgunStats = function() {
+        var data = {
+            action:	self.mgd_dashboard_action,
+            type: 'stats',
+            resolution: 'hour',
+            events: [
+                'delivered',
+                'failed',
+                'stored',
+                'accepted',
+                'opened',
+                'clicked',
+                'unsubscribed',
+                'complained'
+            ]
+        };
+
+        $.ajax( {
+            url: ajaxurl,
+            data: data,
+            type: 'POST',
+            dataType: 'json',
+            success: function( response ) {
+                if ( response.success ) {
+                    self.drawChart( JSON.parse( response.data ), data['events'] );
                 } else {
                     self.consoleWarnErrors( response.data );
                 }
-                eventsTableContainer.prev( '.mgd-loading-section' ).fadeOut();
             }
         });
     };
@@ -43,14 +74,15 @@ var MailgunDashboard_Dashboard = function( $ ) {
             success: function( response ) {
                 var logTableContainer = $( '#mgd-log-table-container' );
                 if ( response.success ) {
-                    var logTable = $( '#mgd-log-table' );
-                    var logTableBody = $( '#mgd-log-table tbody' );
+                    var logTable = $( '#mgd-log-table' ),
+                        logTableBody = $( '#mgd-log-table tbody' );
+
                     logTable.DataTable().destroy();
                     logTableBody.empty();
 
                     $.each( JSON.parse( response.data ).items, function( index, value ) {
                         var newRow = '<tr>' +
-                                        '<td class="status ' + value.type + '" title="' + mailgun_dashboard_dashboard_texts.eventStatus[ value.type ] + '"></td>' +
+                                        '<td class="status ' + value.hap + '" title="' + mailgun_dashboard_dashboard_texts.eventStatus[ value.hap ] + '"></td>' +
                                         '<td>' +
                                             value.created_at +
                                         '</td>' +
@@ -127,22 +159,109 @@ var MailgunDashboard_Dashboard = function( $ ) {
         });
     };
 
-    self.drawChart = function() {
-        var barChartData = JSON.parse( '{"labels":["January","February","March","April","May","June","July"],"datasets":[{"label":"Dataset 1","backgroundColor":"rgb(255, 99, 132)","data":[80,-72,-72,81,96,27,54]},{"label":"Dataset 2","backgroundColor":"rgb(54, 162, 235)","data":[-3,-47,83,-86,-10,49,-70]},{"label":"Dataset 3","backgroundColor":"rgb(75, 192, 192)","data":[22,38,-70,-70,-69,-5,-1]}]}' );
-        var ctx = document.getElementById("canvas");
-        window.myBar = new Chart(ctx, {
+    self.drawChart = function( data, events ) {
+        var statsTableContainer = $( '#mgd-log-stats-chart' ),
+            datasets = [],
+            labels = [],
+            accepted = [],
+            delivered = [],
+            opened = [],
+            clicked = [],
+            complained = [],
+            unsubscribed = [],
+            temporary_fail = [],
+            permanent_fail = [],
+            stored = [];
+
+        statsTableContainer.fadeIn();
+
+        $.each( data.stats, function( index, element ) {
+            labels.push( element.time );
+            accepted.push( element.accepted.total );
+            delivered.push( element.delivered.total );
+            opened.push( element.opened.total );
+            clicked.push( element.clicked.total );
+            complained.push( element.complained.total );
+            unsubscribed.push( element.unsubscribed.total );
+            temporary_fail.push( element.failed.temporary.espblock );
+            permanent_fail.push( element.failed.permanent.total );
+            stored.push( element.stored.total );
+        });
+
+        datasets.push( {
+            label: mailgun_dashboard_dashboard_texts.eventStatus[ 'accepted' ],
+            backgroundColor: '#5da5da',
+            data: accepted
+        });
+
+        datasets.push( {
+            label: mailgun_dashboard_dashboard_texts.eventStatus[ 'delivered' ],
+            backgroundColor: '#60bd68',
+            data: delivered
+        });
+
+        datasets.push( {
+            label: mailgun_dashboard_dashboard_texts.eventStatus[ 'opened' ],
+            backgroundColor: '#407bbf',
+            data: opened
+        });
+
+        datasets.push( {
+            label: mailgun_dashboard_dashboard_texts.eventStatus[ 'clicked' ],
+            backgroundColor: '#386F3F',
+            data: clicked
+        });
+
+        datasets.push( {
+            label: mailgun_dashboard_dashboard_texts.eventStatus[ 'stored' ],
+            backgroundColor: '#2A6062',
+            data: stored
+        });
+
+        datasets.push( {
+            label: mailgun_dashboard_dashboard_texts.eventStatus[ 'complained' ],
+            backgroundColor: '#333333',
+            data: complained
+        });
+
+        datasets.push( {
+            label: mailgun_dashboard_dashboard_texts.eventStatus[ 'unsubscribed' ],
+            backgroundColor: '#BF9940',
+            data: unsubscribed
+        });
+
+        datasets.push( {
+            label: mailgun_dashboard_dashboard_texts.eventStatus[ 'tempfailed' ],
+            backgroundColor: '#FF9800',
+            data: temporary_fail
+        });
+
+        datasets.push( {
+            label: mailgun_dashboard_dashboard_texts.eventStatus[ 'permanent_fail' ],
+            backgroundColor: '#C40022',
+            data: permanent_fail
+        });
+
+        var barChartData = {
+            'labels': labels,
+            'datasets': datasets
+        };
+
+        var ctx = document.getElementById( 'canvas' );
+        window.myBar = new Chart( ctx, {
             type: 'bar',
             data: barChartData,
             options: {
                 title:{
-                    display:true,
-                    text:"Chart.js Bar Chart - Stacked"
+                    display: true,
+                    text: mailgun_dashboard_dashboard_texts.chartTitle
                 },
                 tooltips: {
                     mode: 'index',
                     intersect: false
                 },
                 responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     xAxes: [{
                         stacked: true
@@ -153,12 +272,14 @@ var MailgunDashboard_Dashboard = function( $ ) {
                 }
             }
         });
+        $( '.js-mgd-refresh-dashboard' ).fadeIn();
+        statsTableContainer.prev( '.mgd-loading-section' ).fadeOut();
     };
 
     $( document ).on( 'click', '.js-mgd-refresh-dashboard-button', function() {
-        var eventsTableContainer = $( '#mgd-log-events-chart' );
-        eventsTableContainer.prev( '.mgd-loading-section' ).fadeIn();
-        eventsTableContainer.fadeOut();
+        var statsTableContainer = $( '#mgd-log-stats-chart' );
+        statsTableContainer.prev( '.mgd-loading-section' ).fadeIn();
+        statsTableContainer.fadeOut();
 
         var logTableContainer = $( '#mgd-log-table-container' );
         logTableContainer.prev( '.mgd-loading-section' ).fadeIn();
@@ -167,13 +288,12 @@ var MailgunDashboard_Dashboard = function( $ ) {
         $( '.js-mgd-refresh-dashboard') .fadeOut();
 
         self.getMailgunLog();
-        self.getMailgunEvents();
+        self.getMailgunStats();
     });
 
     self.init = function() {
-        self.getMailgunEvents();
+        self.getMailgunStats();
         self.getMailgunLog();
-        self.drawChart();
     };
 
     self.init();

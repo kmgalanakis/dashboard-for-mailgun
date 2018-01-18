@@ -16,22 +16,51 @@
 }
 
 #mgd-log-table-container,
-#mgd-log-events-chart {
+#mgd-log-stats-chart {
     display: none;
 }
 #mgd-log-table tr td.status {
     width: 10px;
 }
-#mgd-log-table tr td.status.info {
-    background-color: #00a96d;
+
+#mgd-log-table tr td.status.accepted {
+    background-color: #5da5da;
+}
+
+#mgd-log-table tr td.status.opened {
+    background-color: #407bbf;
+}
+
+#mgd-log-table tr td.status.delivered {
+    background-color: #60bd68;
+}
+
+#mgd-log-table tr td.status.unsubscribed {
+    background-color: #BF9940;
+}
+
+#mgd-log-table tr td.status.stored {
+    background-color: #2A6062;
+}
+
+#mgd-log-table tr td.status.complained {
+    background-color: #333333;
+}
+
+#mgd-log-table tr td.status.clicked {
+    background-color: #386F3F;
+}
+
+#mgd-log-table tr td.status.failed {
+    background-color: #C40022;
 }
 
 #mgd-log-table tr td.status.error {
     background-color: #c40022;
 }
 
-#mgd-log-table tr td.status.warn {
-    background-color: #ff9d00;
+#mgd-log-table tr td.status.tempfailed {
+    background-color: #ff9800;
 }
 
 .mgd-refresh-dashboard {
