@@ -93,8 +93,8 @@ class Mailgun_Dashboard_Dashboard {
 				'unsubscribed' => __( 'Unsubscribed', MAILGUN_DASHBOARD_CONTEXT ),
 				'stored' => __( 'Stored', MAILGUN_DASHBOARD_CONTEXT ),
 				'complained' => __( 'Complained', MAILGUN_DASHBOARD_CONTEXT ),
-				'tempfailed' => __( 'Temporary fail', MAILGUN_DASHBOARD_CONTEXT ),
-				'permanent_fail' => __( 'Permanent fail', MAILGUN_DASHBOARD_CONTEXT ),
+				'temporary_failed' => __( 'Temporary fail', MAILGUN_DASHBOARD_CONTEXT ),
+				'permanent_failed' => __( 'Permanent fail', MAILGUN_DASHBOARD_CONTEXT ),
 				'rejected' => __( 'Rejected', MAILGUN_DASHBOARD_CONTEXT ),
 				'account_disabled' => __( 'Account disabled', MAILGUN_DASHBOARD_CONTEXT ),
 			),
@@ -230,6 +230,8 @@ class Mailgun_Dashboard_Dashboard {
 	public function mgd_get_mailgun_events( $url ) {
 		$endpoint = '/events';
 
+		$endpoint .= '?limit=300';
+
 		$response = wp_remote_get( $url . $endpoint );
 
 		if ( is_wp_error( $response ) ) {
@@ -238,6 +240,16 @@ class Mailgun_Dashboard_Dashboard {
 		$data = wp_remote_retrieve_body( $response );
 
 		$decoded_data = json_decode( $data );
+
+		$items = array_map(
+			function( $item ) {
+				$item->timestamp = $this->mgd_adjust_date( $item->timestamp );
+				return $item;
+			},
+			$decoded_data->items
+		);
+
+		$decoded_data->items = $items;
 
 		return $decoded_data;
 	}
@@ -307,6 +319,22 @@ class Mailgun_Dashboard_Dashboard {
 	 * @since 0.1.0
 	 */
 	public function mgd_adjust_date( $time ) {
-		return date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $time ) + get_option( 'gmt_offset' ) * HOUR_IN_SECONDS );
+		$time = $this->mgd_is_valid_timestamp( $time ) ? $time : strtotime( $time );
+		return date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $time + get_option( 'gmt_offset' ) * HOUR_IN_SECONDS );
+		return date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $time + get_option( 'gmt_offset' ) * HOUR_IN_SECONDS );
+	}
+
+	/**
+	 * Checks for a valid timestamp. "Valid" means that the timestamp is an EPOCH float number.
+	 *
+	 * @param  string $timestamp   The timestamp to check..
+	 * @return bool   Returns true if the timestamp is an EPOCH float number.
+	 *
+	 * @since 0.1.0
+	 */
+	public function mgd_is_valid_timestamp( $timestamp ) {
+		return ( (string) (float) $timestamp === (string) $timestamp )
+				&& ( $timestamp <= PHP_INT_MAX )
+				&& ( $timestamp >= ~PHP_INT_MAX );
 	}
 }

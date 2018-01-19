@@ -19,6 +19,11 @@
 #mgd-log-stats-chart {
     display: none;
 }
+
+#mgd-log-table tr {
+    cursor: pointer;
+}
+
 #mgd-log-table tr td.status {
     width: 10px;
 }
@@ -51,7 +56,7 @@
     background-color: #386F3F;
 }
 
-#mgd-log-table tr td.status.failed {
+#mgd-log-table tr td.status.permanent_failed {
     background-color: #C40022;
 }
 
@@ -59,7 +64,7 @@
     background-color: #c40022;
 }
 
-#mgd-log-table tr td.status.tempfailed {
+#mgd-log-table tr td.status.temporary_failed {
     background-color: #ff9800;
 }
 

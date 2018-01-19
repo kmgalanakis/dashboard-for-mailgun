@@ -16,17 +16,101 @@ var MailgunDashboard_Dashboard = function( $ ) {
             type: 'POST',
             dataType: 'json',
             success: function( response ) {
-                var statsTableContainer = $( '#mgd-log-events-chart' );
+                var logTableContainer = $( '#mgd-log-table-container' );
                 if ( response.success ) {
-                    statsTableContainer.fadeIn();
+                    var data = JSON.parse( response.data ).items;
+
+                    var logTable = $( '#mgd-log-table' );
+                    logTable.DataTable().destroy();
+                    logTable.DataTable({
+                        'data' : data,
+                        'columns' : [
+                            { defaultContent: '', width: '1%' },
+                            { data: 'timestamp', width: '15%' },
+                            {
+                                data: 'event',
+                                width: '15%',
+                                render: function ( data, type, row, meta ) {
+                                    var event = 'failed' !== row.event ? row.event : row.severity + '_' + row.event;
+                                    return mailgun_dashboard_dashboard_texts.eventStatus[ event ];
+                                },
+                            },
+                            { data: 'recipient', width: '68%' },
+                        ],
+                        'createdRow': function( row, data, dataIndex ) {
+                            var event = 'failed' !== data.event ? data.event : data.severity + '_' + data.event;
+                            $( row ).find( '>:first-child' ).addClass( 'status' ).addClass( event );
+                        },
+                        'iDisplayLength': 25,
+                        'order': [[ 1, 'desc' ]],
+                        'columnDefs': [
+                            {
+                                'targets': [0, 2],
+                                'orderable': false
+                            },
+                            {
+                                'type': 'date',
+                                'targets': [1]
+                            }
+                        ],
+                        bAutoWidth: false ,
+                        'language' : {
+                            'decimal': mailgun_dashboard_dashboard_texts.decimal,
+                            'emptyTable': mailgun_dashboard_dashboard_texts.emptyTable,
+                            'info': mailgun_dashboard_dashboard_texts.info,
+                            'infoEmpty': mailgun_dashboard_dashboard_texts.infoEmpty,
+                            'infoFiltered': mailgun_dashboard_dashboard_texts.infoFiltered,
+                            'infoPostFix': mailgun_dashboard_dashboard_texts.infoPostFix,
+                            'thousands': mailgun_dashboard_dashboard_texts.thousands,
+                            'lengthMenu': mailgun_dashboard_dashboard_texts.lengthMenu,
+                            'loadingRecords': mailgun_dashboard_dashboard_texts.loadingRecords,
+                            'processing': mailgun_dashboard_dashboard_texts.processing,
+                            'search': mailgun_dashboard_dashboard_texts.search,
+                            'zeroRecords': mailgun_dashboard_dashboard_texts.zeroRecords,
+                            'paginate': {
+                                'first': mailgun_dashboard_dashboard_texts.first,
+                                'last': mailgun_dashboard_dashboard_texts.last,
+                                'next': mailgun_dashboard_dashboard_texts.next,
+                                'previous': mailgun_dashboard_dashboard_texts.previous
+                            },
+                            'aria': {
+                                'sortAscending': mailgun_dashboard_dashboard_texts.sortAscending,
+                                'sortDescending': mailgun_dashboard_dashboard_texts.sortDescending
+                            }
+                        }
+                    });
+                    logTableContainer.fadeIn();
+
                     $( '.js-mgd-refresh-dashboard' ).fadeIn();
                 } else {
-                    // self.consoleWarnErrors( response.data );
+                    self.consoleWarnErrors( response.data );
                 }
-                statsTableContainer.prev( '.mgd-loading-section' ).fadeOut();
+
+                logTableContainer.prev( '.mgd-loading-section' ).fadeOut();
             }
         });
     };
+
+    $( '#mgd-log-table tbody' ).on( 'click', 'tr', function () {
+        var logTable = $( '#mgd-log-table' ).DataTable();
+        var tr = $( this ).closest( 'tr' );
+        var row = logTable.row( tr );
+
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass( 'shown' );
+        }
+        else {
+            // Open this row
+            row.child( self.formatChildRow( row.data() ) ).show();
+            tr.addClass( 'shown' );
+        }
+    } );
+
+    self.formatChildRow = function( data ) {
+        return '<pre>' + JSON.stringify( data, null, '\t' ) + '</pre>';
+    }
 
     self.getMailgunStats = function() {
         var data = {
@@ -231,13 +315,13 @@ var MailgunDashboard_Dashboard = function( $ ) {
         });
 
         datasets.push( {
-            label: mailgun_dashboard_dashboard_texts.eventStatus[ 'tempfailed' ],
+            label: mailgun_dashboard_dashboard_texts.eventStatus[ 'temporary_failed' ],
             backgroundColor: '#FF9800',
             data: temporary_fail
         });
 
         datasets.push( {
-            label: mailgun_dashboard_dashboard_texts.eventStatus[ 'permanent_fail' ],
+            label: mailgun_dashboard_dashboard_texts.eventStatus[ 'permanent_failed' ],
             backgroundColor: '#C40022',
             data: permanent_fail
         });
@@ -287,13 +371,15 @@ var MailgunDashboard_Dashboard = function( $ ) {
 
         $( '.js-mgd-refresh-dashboard') .fadeOut();
 
-        self.getMailgunLog();
+        // self.getMailgunLog();
+        self.getMailgunEvents();
         self.getMailgunStats();
     });
 
     self.init = function() {
+        // self.getMailgunLog();
+        self.getMailgunEvents();
         self.getMailgunStats();
-        self.getMailgunLog();
     };
 
     self.init();
