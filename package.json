@@ -4,9 +4,13 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "bootstrap": "^4.0.0",
     "chart.js": "^2.7.1",
     "datatables.net": "^1.10.16",
-    "datatables.net-dt": "^1.10.16"
+    "datatables.net-dt": "^1.10.16",
+    "daterangepicker": "^2.1.27",
+    "font-awesome": "^4.7.0",
+    "moment": "^2.20.1"
   },
   "devDependencies": {},
   "scripts": {

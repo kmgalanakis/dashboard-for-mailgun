@@ -4,10 +4,12 @@ var MailgunDashboard_Dashboard = function( $ ) {
 
     self.mgd_dashboard_action = 'mgd_get_mailgun_dashboard_api';
 
-    self.getMailgunEvents = function() {
+    self.getMailgunEvents = function( dateRangeStart, dateRangeEnd ) {
         var data = {
             action:	self.mgd_dashboard_action,
-            type: 'events'
+            type: 'events',
+            dateRangeStart: dateRangeStart.unix(),
+            dateRangeEnd: dateRangeEnd.unix(),
         };
 
         $.ajax( {
@@ -16,11 +18,11 @@ var MailgunDashboard_Dashboard = function( $ ) {
             type: 'POST',
             dataType: 'json',
             success: function( response ) {
-                var logTableContainer = $( '#mgd-log-table-container' );
+                var logTableContainer = $( '#mgd-events-table-container' );
                 if ( response.success ) {
                     var data = JSON.parse( response.data ).items;
 
-                    var logTable = $( '#mgd-log-table' );
+                    var logTable = $( '#mgd-events-table' );
                     logTable.DataTable().destroy();
                     logTable.DataTable({
                         'data' : data,
@@ -79,20 +81,23 @@ var MailgunDashboard_Dashboard = function( $ ) {
                             }
                         }
                     });
+                    // Fade out the loading gif
+                    logTableContainer.prev( '.mgd-loading-section' ).fadeOut();
+
+                    // Fade in the table
                     logTableContainer.fadeIn();
 
+                    // Fade in the refresh dashboard button
                     $( '.js-mgd-refresh-dashboard' ).fadeIn();
                 } else {
                     self.consoleWarnErrors( response.data );
                 }
-
-                logTableContainer.prev( '.mgd-loading-section' ).fadeOut();
             }
         });
     };
 
-    $( '#mgd-log-table tbody' ).on( 'click', 'tr', function () {
-        var logTable = $( '#mgd-log-table' ).DataTable();
+    $( '#mgd-events-table tbody' ).on( 'click', 'tr', function () {
+        var logTable = $( '#mgd-events-table' ).DataTable();
         var tr = $( this ).closest( 'tr' );
         var row = logTable.row( tr );
 
@@ -112,7 +117,7 @@ var MailgunDashboard_Dashboard = function( $ ) {
         return '<pre>' + JSON.stringify( data, null, '\t' ) + '</pre>';
     }
 
-    self.getMailgunStats = function() {
+    self.getMailgunStats = function( dateRangeStart, dateRangeEnd ) {
         var data = {
             action:	self.mgd_dashboard_action,
             type: 'stats',
@@ -126,7 +131,9 @@ var MailgunDashboard_Dashboard = function( $ ) {
                 'clicked',
                 'unsubscribed',
                 'complained'
-            ]
+            ],
+            dateRangeStart: dateRangeStart.unix(),
+            dateRangeEnd: dateRangeEnd.unix(),
         };
 
         $.ajax( {
@@ -156,10 +163,10 @@ var MailgunDashboard_Dashboard = function( $ ) {
             type: 'POST',
             dataType: 'json',
             success: function( response ) {
-                var logTableContainer = $( '#mgd-log-table-container' );
+                var logTableContainer = $( '#mgd-events-table-container' );
                 if ( response.success ) {
-                    var logTable = $( '#mgd-log-table' ),
-                        logTableBody = $( '#mgd-log-table tbody' );
+                    var logTable = $( '#mgd-events-table' ),
+                        logTableBody = $( '#mgd-events-table tbody' );
 
                     logTable.DataTable().destroy();
                     logTableBody.empty();
@@ -224,14 +231,19 @@ var MailgunDashboard_Dashboard = function( $ ) {
                         }
                     );
 
+                    // Fade out the loading gif
+                    logTableContainer.prev( '.mgd-loading-section' ).fadeOut();
+
+                    // Fade in the table
                     logTableContainer.fadeIn();
 
+                    // Fade in the refresh dashboard button
                     $( '.js-mgd-refresh-dashboard' ).fadeIn();
                 } else {
                     self.consoleWarnErrors( response.data );
                 }
 
-                logTableContainer.prev( '.mgd-loading-section' ).fadeOut();
+
             }
         });
     };
@@ -244,7 +256,8 @@ var MailgunDashboard_Dashboard = function( $ ) {
     };
 
     self.drawChart = function( data, events ) {
-        var statsTableContainer = $( '#mgd-log-stats-chart' ),
+        var statsChartContainer = $( '#mgd-stats-chart' ),
+            dateRangeContainer = $( '#mgd-date-range' ),
             datasets = [],
             labels = [],
             accepted = [],
@@ -256,8 +269,6 @@ var MailgunDashboard_Dashboard = function( $ ) {
             temporary_fail = [],
             permanent_fail = [],
             stored = [];
-
-        statsTableContainer.fadeIn();
 
         $.each( data.stats, function( index, element ) {
             labels.push( element.time );
@@ -331,6 +342,10 @@ var MailgunDashboard_Dashboard = function( $ ) {
             'datasets': datasets
         };
 
+        if ( typeof window.myBar !== 'undefined' ) {
+            window.myBar.destroy();
+        }
+
         var ctx = document.getElementById( 'canvas' );
         window.myBar = new Chart( ctx, {
             type: 'bar',
@@ -356,30 +371,96 @@ var MailgunDashboard_Dashboard = function( $ ) {
                 }
             }
         });
+
+        // Fade out the loading gif
+        statsChartContainer.prev( '.mgd-loading-section' ).fadeOut();
+
+        // Fade in the chart
+        statsChartContainer.fadeIn();
+
+        // Fade in the date range picker
+        dateRangeContainer.fadeIn();
+
+        // Fade in the refresh dashboard button
         $( '.js-mgd-refresh-dashboard' ).fadeIn();
-        statsTableContainer.prev( '.mgd-loading-section' ).fadeOut();
     };
 
     $( document ).on( 'click', '.js-mgd-refresh-dashboard-button', function() {
-        var statsTableContainer = $( '#mgd-log-stats-chart' );
-        statsTableContainer.prev( '.mgd-loading-section' ).fadeIn();
-        statsTableContainer.fadeOut();
+        var statsChartContainer = $( '#mgd-stats-chart' );
+        statsChartContainer.prev( '.mgd-loading-section' ).fadeIn();
+        statsChartContainer.fadeOut();
 
-        var logTableContainer = $( '#mgd-log-table-container' );
-        logTableContainer.prev( '.mgd-loading-section' ).fadeIn();
-        logTableContainer.fadeOut();
+        var dateRangeContainer = $( '#mgd-date-range' );
+        dateRangeContainer.fadeOut();
+
+        var eventsTableContainer = $( '#mgd-events-table-container' );
+        eventsTableContainer.prev( '.mgd-loading-section' ).fadeIn();
+        eventsTableContainer.fadeOut();
 
         $( '.js-mgd-refresh-dashboard') .fadeOut();
 
+        var range = self.setRangeStartEnd();
+
+        self.setDateRangeValue( range.dateRangeStart, range.dateRangeEnd );
+
         // self.getMailgunLog();
-        self.getMailgunEvents();
-        self.getMailgunStats();
+        self.getMailgunStats( range.dateRangeStart, range.dateRangeEnd );
+        self.getMailgunEvents( range.dateRangeStart, range.dateRangeEnd );
     });
 
+    self.setDateRangeValue = function( dateRangeStart, dateRangeEnd ) {
+        $( '#mgd-date-range span' ).html( dateRangeStart.format( 'MMMM D, YYYY' ) + ' - ' + dateRangeEnd.format( 'MMMM D, YYYY' ) );
+    }
+
+    self.dateRangeCallback = function( dateRangeStart, dateRangeEnd ) {
+
+        self.setDateRangeValue( dateRangeStart, dateRangeEnd );
+
+        var statsChartContainer = $( '#mgd-stats-chart' );
+        statsChartContainer.prev( '.mgd-loading-section' ).fadeIn();
+        statsChartContainer.fadeOut();
+
+        self.getMailgunStats( dateRangeStart, dateRangeEnd );
+
+        var eventsTableContainer = $( '#mgd-events-table-container' );
+        eventsTableContainer.prev( '.mgd-loading-section' ).fadeIn();
+        eventsTableContainer.fadeOut();
+
+        self.getMailgunEvents( dateRangeStart, dateRangeEnd );
+    }
+
+    self.initDatePicker = function ( dateRangeStart, dateRangeEnd ) {
+        var ranges = {};
+
+        ranges[ mailgun_dashboard_dashboard_texts.today ] = [ moment(), moment() ],
+        ranges[ mailgun_dashboard_dashboard_texts.yesterday ] = [ moment().subtract( 1, 'days' ), moment().subtract( 1, 'days' ) ],
+        ranges[ mailgun_dashboard_dashboard_texts.lastSevenDays ] = [ moment().subtract( 6, 'days' ), moment() ],
+        ranges[ mailgun_dashboard_dashboard_texts.lastTwentyEightDays ] = [ moment().subtract( 27, 'days' ), moment() ],
+
+        $( '#mgd-date-range' ).daterangepicker({
+            alwaysShowCalendars: true,
+            minDate: moment().subtract( 27, 'days' ),
+            maxDate: moment(),
+            ranges: ranges
+        }, self.dateRangeCallback );
+
+        self.setDateRangeValue( dateRangeStart, dateRangeEnd );
+    };
+
+    self.setRangeStartEnd = function() {
+        return {
+            dateRangeStart: moment().subtract(6, 'days'),
+            dateRangeEnd: moment(),
+        }
+    }
+
     self.init = function() {
+        var range = self.setRangeStartEnd();
+
         // self.getMailgunLog();
-        self.getMailgunEvents();
-        self.getMailgunStats();
+        self.getMailgunStats( range.dateRangeStart, range.dateRangeEnd );
+        self.initDatePicker( range.dateRangeStart, range.dateRangeEnd );
+        self.getMailgunEvents( range.dateRangeStart, range.dateRangeEnd );
     };
 
     self.init();

@@ -104,6 +104,10 @@ class Mailgun_Dashboard_Dashboard {
 			'mailgun_api_failed' => __( 'Mailgun API failed', MAILGUN_DASHBOARD_CONTEXT ),
 			'console_for_info' => __( 'See the console for further information', MAILGUN_DASHBOARD_CONTEXT ),
 			'mailgun_api_error' => __( 'Mailgun API error', MAILGUN_DASHBOARD_CONTEXT ),
+			'today' => __( 'Today', MAILGUN_DASHBOARD_CONTEXT ),
+			'yesterday' => __( 'Yesterday', MAILGUN_DASHBOARD_CONTEXT ),
+			'lastSevenDays' => __( 'Last 7 days', MAILGUN_DASHBOARD_CONTEXT ),
+			'lastTwentyEightDays' => __( 'Last 28 days', MAILGUN_DASHBOARD_CONTEXT ),
 		);
 		//@codingStandardsIgnoreEnd
 
@@ -166,14 +170,22 @@ class Mailgun_Dashboard_Dashboard {
 					$decoded_data = $this->mgd_get_mailgun_log( $url );
 					break;
 				case 'events':
-					$decoded_data = $this->mgd_get_mailgun_events( $url );
+					$date_range_start = sanitize_text_field( $_POST['dateRangeStart'] );
+
+					$date_range_end = sanitize_text_field( $_POST['dateRangeEnd'] );
+
+					$decoded_data = $this->mgd_get_mailgun_events( $url, $date_range_start, $date_range_end );
 					break;
 				case 'stats':
 					$resolution = sanitize_text_field( $_POST['resolution'] );
 
+					$date_range_start = sanitize_text_field( $_POST['dateRangeStart'] );
+
+					$date_range_end = sanitize_text_field( $_POST['dateRangeEnd'] );
+
 					$events = array_map( 'sanitize_text_field', wp_unslash( $_POST['events'] ) );
 
-					$decoded_data = $this->mgd_get_mailgun_stats( $url, $resolution, $events );
+					$decoded_data = $this->mgd_get_mailgun_stats( $url, $resolution, $events, $date_range_start, $date_range_end );
 					break;
 				default:
 					$decoded_data = array();
@@ -222,17 +234,27 @@ class Mailgun_Dashboard_Dashboard {
 	/**
 	 * Load log events from Mailgun's API.
 	 *
-	 * @param  string $url The authenticated API url.
+	 * @param  string $url              The authenticated API url.
+	 * @param  int    $date_range_start The start date timestamp for the Mailgun events query.
+	 * @param  int    $date_range_end   The start date timestamp for the Mailgun events query.
 	 * @return array  The events data.
 	 *
 	 * @since 0.1.0
 	 */
-	public function mgd_get_mailgun_events( $url ) {
+	public function mgd_get_mailgun_events( $url, $date_range_start, $date_range_end ) {
 		$endpoint = '/events';
 
 		$endpoint .= '?limit=300';
 
-		$response = wp_remote_get( $url . $endpoint );
+		$endpoint .= '&begin=' . $date_range_end;
+
+		$endpoint .= '&end=' . $date_range_start;
+
+		$args = array(
+			'timeout' => 30,
+		);
+
+		$response = wp_remote_get( $url . $endpoint, $args );
 
 		if ( is_wp_error( $response ) ) {
 			wp_send_json_error( $response->errors );
@@ -257,9 +279,11 @@ class Mailgun_Dashboard_Dashboard {
 	/**
 	 * Load log stats from Mailgun's API.
 	 *
-	 * @param  string $url         The authenticated API url.
-	 * @param  string $resolution  Can be either 'hour', 'day' or 'month'. Default is 'day'.
-	 * @param  array  $events      The type of the events to fetch stats for.
+	 * @param  string $url              The authenticated API url.
+	 * @param  string $resolution       Can be either 'hour', 'day' or 'month'. Default is 'day'.
+	 * @param  array  $events           The type of the events to fetch stats for.
+	 * @param  int    $date_range_start The start date timestamp for the Mailgun stats query.
+	 * @param  int    $date_range_end   The start date timestamp for the Mailgun stats query.
 	 * @return array  The stats data.
 	 *
 	 * @since 0.1.0
@@ -276,19 +300,27 @@ class Mailgun_Dashboard_Dashboard {
 			'clicked',
 			'unsubscribed',
 			'complained',
-		)
+		),
+		$date_range_start,
+		$date_range_end
 	) {
 		$endpoint = '/stats/total';
 
 		$endpoint .= '?resolution=' . $resolution;
 
-		$endpoint .= '&start=' . strtotime( '-28 day' );
+		$endpoint .= '&start=' . $date_range_start;
+
+		$endpoint .= '&end=' . $date_range_end;
 
 		foreach ( $events as $event ) {
 			$endpoint .= '&event=' . $event;
 		}
 
-		$response = wp_remote_get( $url . $endpoint );
+		$args = array(
+			'timeout' => 30,
+		);
+
+		$response = wp_remote_get( $url . $endpoint, $args );
 
 		if ( is_wp_error( $response ) ) {
 			wp_send_json_error( $response->errors );

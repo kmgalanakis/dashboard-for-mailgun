@@ -1,3 +1,7 @@
+#mgd-body hr {
+    margin-right: 15px;
+}
+
 .mgd-loading-section .mgd-loading-content::before {
     background: url( '../img/clouding-2x.gif' ) center center no-repeat;
     background-size: auto 20px;
@@ -15,56 +19,58 @@
     text-align: center;
 }
 
-#mgd-log-table-container,
-#mgd-log-stats-chart {
+#mgd-events-table-container,
+#mgd-stats-chart,
+#mgd-date-range {
     display: none;
+    margin: 0 15px 0 0;
 }
 
-#mgd-log-table tr {
+#mgd-events-table tr {
     cursor: pointer;
 }
 
-#mgd-log-table tr td.status {
+#mgd-events-table tr td.status {
     width: 10px;
 }
 
-#mgd-log-table tr td.status.accepted {
+#mgd-events-table tr td.status.accepted {
     background-color: #5da5da;
 }
 
-#mgd-log-table tr td.status.opened {
+#mgd-events-table tr td.status.opened {
     background-color: #407bbf;
 }
 
-#mgd-log-table tr td.status.delivered {
+#mgd-events-table tr td.status.delivered {
     background-color: #60bd68;
 }
 
-#mgd-log-table tr td.status.unsubscribed {
+#mgd-events-table tr td.status.unsubscribed {
     background-color: #BF9940;
 }
 
-#mgd-log-table tr td.status.stored {
+#mgd-events-table tr td.status.stored {
     background-color: #2A6062;
 }
 
-#mgd-log-table tr td.status.complained {
+#mgd-events-table tr td.status.complained {
     background-color: #333333;
 }
 
-#mgd-log-table tr td.status.clicked {
+#mgd-events-table tr td.status.clicked {
     background-color: #386F3F;
 }
 
-#mgd-log-table tr td.status.permanent_failed {
+#mgd-events-table tr td.status.permanent_failed {
     background-color: #C40022;
 }
 
-#mgd-log-table tr td.status.error {
+#mgd-events-table tr td.status.error {
     background-color: #c40022;
 }
 
-#mgd-log-table tr td.status.temporary_failed {
+#mgd-events-table tr td.status.temporary_failed {
     background-color: #ff9800;
 }
 

@@ -57,6 +57,30 @@ class Mailgun_Dashboard_Main {
 		);
 
 		wp_register_script(
+			'mailgun_dashboard_bootstrap',
+			MAILGUN_DASHBOARD_URL . '/node_modules/bootstrap/dist/js/bootstrap.js',
+			array(),
+			MAILGUN_DASHBOARD_VERSION,
+			false
+		);
+
+		wp_register_script(
+			'mailgun_dashboard_moment',
+			MAILGUN_DASHBOARD_URL . '/node_modules/moment/min/moment.min.js',
+			array(),
+			MAILGUN_DASHBOARD_VERSION,
+			false
+		);
+
+		wp_register_script(
+			'mailgun_dashboard_daterangepicker',
+			MAILGUN_DASHBOARD_URL . '/node_modules/daterangepicker/daterangepicker.js',
+			array( 'jquery', 'mailgun_dashboard_bootstrap', 'mailgun_dashboard_moment' ),
+			MAILGUN_DASHBOARD_VERSION,
+			false
+		);
+
+		wp_register_script(
 			'mailgun_dashboard_datatables_js',
 			MAILGUN_DASHBOARD_URL . '/node_modules/datatables.net/js/jquery.dataTables.js',
 			array(),
@@ -68,6 +92,27 @@ class Mailgun_Dashboard_Main {
 			'mailgun_dashboard_datatables_css',
 			MAILGUN_DASHBOARD_URL . '/node_modules/datatables.net-dt/css/jquery.dataTables.css',
 			array(),
+			MAILGUN_DASHBOARD_VERSION
+		);
+
+		wp_register_style(
+			'mailgun_dashboard_bootstrap_css',
+			MAILGUN_DASHBOARD_URL . '/node_modules/bootstrap/dist/css/bootstrap.css',
+			array(),
+			MAILGUN_DASHBOARD_VERSION
+		);
+
+		wp_register_style(
+			'mailgun_dashboard_fontawesome_css',
+			MAILGUN_DASHBOARD_URL . '/node_modules/font-awesome/css/font-awesome.min.css',
+			array(),
+			MAILGUN_DASHBOARD_VERSION
+		);
+
+		wp_register_style(
+			'mailgun_dashboard_daterangepicker_css',
+			MAILGUN_DASHBOARD_URL . '/node_modules/daterangepicker/daterangepicker.css',
+			array( 'mailgun_dashboard_bootstrap_css', 'mailgun_dashboard_fontawesome_css' ),
 			MAILGUN_DASHBOARD_VERSION
 		);
 
@@ -87,9 +132,13 @@ class Mailgun_Dashboard_Main {
 
 		wp_enqueue_script( 'mailgun_dashboard_datatables_js' );
 
+		wp_enqueue_script( 'mailgun_dashboard_daterangepicker' );
+
 		wp_enqueue_style( 'mailgun_dashboard_datatables_css' );
 
 		wp_enqueue_style( 'mailgun_dashboard_css' );
+
+		wp_enqueue_style( 'mailgun_dashboard_daterangepicker_css' );
 	}
 
 	/**

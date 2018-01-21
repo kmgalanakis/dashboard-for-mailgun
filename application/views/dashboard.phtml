@@ -1,48 +1,56 @@
-<h1><?php echo esc_html( __( 'Dashboard', MAILGUN_DASHBOARD_CONTEXT ) ); ?></h1>
+<div id="mgd-body">
+    <h1><?php echo esc_html( __( 'Dashboard', MAILGUN_DASHBOARD_CONTEXT ) ); ?></h1>
 
-<div class="mgd-refresh-dashboard js-mgd-refresh-dashboard">
-    <button class="button button-primary js-mgd-refresh-dashboard-button"><?php echo esc_html( __( 'Refresh dashboard', MAILGUN_DASHBOARD_CONTEXT ) ); ?></button>
+    <div class="mgd-refresh-dashboard js-mgd-refresh-dashboard">
+        <button class="button button-primary js-mgd-refresh-dashboard-button"><?php echo esc_html( __( 'Refresh dashboard', MAILGUN_DASHBOARD_CONTEXT ) ); ?></button>
+    </div>
+    <div class="clear"></div>
+
+    <div id='mgd-date-range' class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 25vw; ">
+        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+        <span></span> <b class="caret"></b>
+    </div>
+    <div class="clear"></div>
+
+    <div class="mgd-loading-section">
+        <div class="mgd-loading-content"><?php echo esc_html( __( 'Loading', MAILGUN_DASHBOARD_CONTEXT ) ); ?>...</div>
+    </div>
+
+    <div id="mgd-stats-chart" style="height: 60vh">
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <hr />
+
+    <div class="mgd-loading-section">
+        <div class="mgd-loading-content"><?php echo esc_html( __( 'Loading', MAILGUN_DASHBOARD_CONTEXT ) ); ?>...</div>
+    </div>
+
+    <div id="mgd-events-table-container">
+        <table id="mgd-events-table" class="row-border hover" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th><?php echo esc_html( __( 'Date/Time', MAILGUN_DASHBOARD_CONTEXT ) ); ?></th>
+                    <th><?php echo esc_html( __( 'Event', MAILGUN_DASHBOARD_CONTEXT ) ); ?></th>
+                    <th><?php echo esc_html( __( 'Recipient', MAILGUN_DASHBOARD_CONTEXT ) ); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th><?php echo esc_html( __( 'Date/Time', MAILGUN_DASHBOARD_CONTEXT ) ); ?></th>
+                    <th><?php echo esc_html( __( 'Event', MAILGUN_DASHBOARD_CONTEXT ) ); ?></th>
+                    <th><?php echo esc_html( __( 'Recipient', MAILGUN_DASHBOARD_CONTEXT ) ); ?></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="mgd-refresh-dashboard js-mgd-refresh-dashboard">
+        <button class="button button-primary js-mgd-refresh-dashboard-button"><?php echo esc_html( __( 'Refresh dashboard', MAILGUN_DASHBOARD_CONTEXT ) ); ?></button>
+    </div>
+    <div class="clear"></div>
 </div>
-<div class="clear"></div>
-
-<div class="mgd-loading-section">
-    <div class="mgd-loading-content"><?php echo esc_html( __( 'Loading', MAILGUN_DASHBOARD_CONTEXT ) ); ?>...</div>
-</div>
-
-<div id="mgd-log-stats-chart" style="height: 60vh">
-    <canvas id="canvas"></canvas>
-</div>
-
-<hr />
-
-<div class="mgd-loading-section">
-    <div class="mgd-loading-content"><?php echo esc_html( __( 'Loading', MAILGUN_DASHBOARD_CONTEXT ) ); ?>...</div>
-</div>
-
-<div id="mgd-log-table-container">
-    <table id="mgd-log-table" class="row-border hover" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th></th>
-                <th><?php echo esc_html( __( 'Date/Time', MAILGUN_DASHBOARD_CONTEXT ) ); ?></th>
-                <th><?php echo esc_html( __( 'Event', MAILGUN_DASHBOARD_CONTEXT ) ); ?></th>
-                <th><?php echo esc_html( __( 'Recipient', MAILGUN_DASHBOARD_CONTEXT ) ); ?></th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-        <tfoot>
-            <tr>
-                <th></th>
-                <th><?php echo esc_html( __( 'Date/Time', MAILGUN_DASHBOARD_CONTEXT ) ); ?></th>
-                <th><?php echo esc_html( __( 'Event', MAILGUN_DASHBOARD_CONTEXT ) ); ?></th>
-                <th><?php echo esc_html( __( 'Recipient', MAILGUN_DASHBOARD_CONTEXT ) ); ?></th>
-            </tr>
-        </tfoot>
-    </table>
-</div>
-
-<div class="mgd-refresh-dashboard js-mgd-refresh-dashboard">
-    <button class="button button-primary js-mgd-refresh-dashboard-button"><?php echo esc_html( __( 'Refresh dashboard', MAILGUN_DASHBOARD_CONTEXT ) ); ?></button>
-</div>
-<div class="clear"></div>
