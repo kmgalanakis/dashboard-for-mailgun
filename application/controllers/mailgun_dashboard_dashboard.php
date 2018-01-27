@@ -55,9 +55,9 @@ class Mailgun_Dashboard_Dashboard {
 	 * @since 0.1.0
 	 */
 	public function register_assets() {
-		wp_register_script( 'dashboard-js',
-			MAILGUN_DASHBOARD_URL . '/res/js/dashboard.js',
-			array( 'jquery' ),
+		wp_register_script( 'mailgun_dashboard',
+			MAILGUN_DASHBOARD_URL . '/assets/js/mailgun_dashboard.js',
+			array( 'jquery', 'mailgun_dashboard_chartjs', 'mailgun_dashboard_datatables', 'mailgun_dashboard_daterangepicker' ),
 			MAILGUN_DASHBOARD_VERSION,
 			true
 		);
@@ -112,8 +112,8 @@ class Mailgun_Dashboard_Dashboard {
 		//@codingStandardsIgnoreEnd
 
 		wp_localize_script(
-			'dashboard-js',
-			'mailgun_dashboard_dashboard_texts',
+			'mailgun_dashboard',
+			'mailgunDashboardDashboardTexts',
 			$dashboard_script_texts
 		);
 	}
@@ -123,7 +123,7 @@ class Mailgun_Dashboard_Dashboard {
 	 */
 	public function enqueue_assets() {
 		if ( get_current_screen()->id === self::MAILGUN_DASHBOARD_DASHBOARD_PAGE_SCREEN_ID ) {
-			wp_enqueue_script( 'dashboard-js' );
+			wp_enqueue_script( 'mailgun_dashboard' );
 		}
 	}
 

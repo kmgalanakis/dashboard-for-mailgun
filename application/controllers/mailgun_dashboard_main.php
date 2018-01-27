@@ -49,16 +49,16 @@ class Mailgun_Dashboard_Main {
 	 */
 	public function register_assets() {
 		wp_register_script(
-			'mailgun_dashboard_chart_js',
-			MAILGUN_DASHBOARD_URL . '/node_modules/chart.js/dist/Chart.js',
-			array(),
+			'mailgun_dashboard_chartjs',
+			MAILGUN_DASHBOARD_URL . '/assets/js/third-party/Chart.js',
+			array( 'mailgun_dashboard_moment' ),
 			MAILGUN_DASHBOARD_VERSION,
 			false
 		);
 
 		wp_register_script(
 			'mailgun_dashboard_bootstrap',
-			MAILGUN_DASHBOARD_URL . '/node_modules/bootstrap/dist/js/bootstrap.js',
+			MAILGUN_DASHBOARD_URL . '/assets/js/third-party/bootstrap.js',
 			array(),
 			MAILGUN_DASHBOARD_VERSION,
 			false
@@ -66,7 +66,7 @@ class Mailgun_Dashboard_Main {
 
 		wp_register_script(
 			'mailgun_dashboard_moment',
-			MAILGUN_DASHBOARD_URL . '/node_modules/moment/min/moment.min.js',
+			MAILGUN_DASHBOARD_URL . '/assets/js/third-party/moment.js',
 			array(),
 			MAILGUN_DASHBOARD_VERSION,
 			false
@@ -74,51 +74,51 @@ class Mailgun_Dashboard_Main {
 
 		wp_register_script(
 			'mailgun_dashboard_daterangepicker',
-			MAILGUN_DASHBOARD_URL . '/node_modules/daterangepicker/daterangepicker.js',
+			MAILGUN_DASHBOARD_URL . '/assets/js/third-party/daterangepicker.js',
 			array( 'jquery', 'mailgun_dashboard_bootstrap', 'mailgun_dashboard_moment' ),
 			MAILGUN_DASHBOARD_VERSION,
 			false
 		);
 
 		wp_register_script(
-			'mailgun_dashboard_datatables_js',
-			MAILGUN_DASHBOARD_URL . '/node_modules/datatables.net/js/jquery.dataTables.js',
-			array(),
+			'mailgun_dashboard_datatables',
+			MAILGUN_DASHBOARD_URL . '/assets/js/third-party/jquery.dataTables.js',
+			array( 'jquery' ),
 			MAILGUN_DASHBOARD_VERSION,
 			true
 		);
 
 		wp_register_style(
 			'mailgun_dashboard_datatables_css',
-			MAILGUN_DASHBOARD_URL . '/node_modules/datatables.net-dt/css/jquery.dataTables.css',
+			MAILGUN_DASHBOARD_URL . 'assets/css/third-party/jquery.dataTables.css',
 			array(),
 			MAILGUN_DASHBOARD_VERSION
 		);
 
 		wp_register_style(
 			'mailgun_dashboard_bootstrap_css',
-			MAILGUN_DASHBOARD_URL . '/node_modules/bootstrap/dist/css/bootstrap.css',
+			MAILGUN_DASHBOARD_URL . 'assets/css/third-party/bootstrap.css',
 			array(),
 			MAILGUN_DASHBOARD_VERSION
 		);
 
 		wp_register_style(
 			'mailgun_dashboard_fontawesome_css',
-			MAILGUN_DASHBOARD_URL . '/node_modules/font-awesome/css/font-awesome.min.css',
+			MAILGUN_DASHBOARD_URL . 'assets/css/third-party/font-awesome.min.css',
 			array(),
 			MAILGUN_DASHBOARD_VERSION
 		);
 
 		wp_register_style(
 			'mailgun_dashboard_daterangepicker_css',
-			MAILGUN_DASHBOARD_URL . '/node_modules/daterangepicker/daterangepicker.css',
+			MAILGUN_DASHBOARD_URL . '/assets/css/third-party/daterangepicker.css',
 			array( 'mailgun_dashboard_bootstrap_css', 'mailgun_dashboard_fontawesome_css' ),
 			MAILGUN_DASHBOARD_VERSION
 		);
 
 		wp_register_style(
 			'mailgun_dashboard_css',
-			MAILGUN_DASHBOARD_URL . '/res/css/mailgun_dashboard.css',
+			MAILGUN_DASHBOARD_URL . '/assets/css/mailgun_dashboard.css',
 			array(),
 			MAILGUN_DASHBOARD_VERSION
 		);
@@ -128,12 +128,6 @@ class Mailgun_Dashboard_Main {
 	 * "Mailgun Dashboard" plugin's main class assets enqueueing.
 	 */
 	public function enqueue_assets() {
-		wp_enqueue_script( 'mailgun_dashboard_chart_js' );
-
-		wp_enqueue_script( 'mailgun_dashboard_datatables_js' );
-
-		wp_enqueue_script( 'mailgun_dashboard_daterangepicker' );
-
 		wp_enqueue_style( 'mailgun_dashboard_datatables_css' );
 
 		wp_enqueue_style( 'mailgun_dashboard_css' );
