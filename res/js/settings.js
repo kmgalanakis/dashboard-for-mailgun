@@ -1,4 +1,4 @@
-var MailgunDashboard_Settings = function( $ ) {
+var MailgunDashboardSettings = function( $ ) {
 
     var self = this;
 
@@ -18,8 +18,8 @@ var MailgunDashboard_Settings = function( $ ) {
 
     self.init();
 
-}
+};
 
 jQuery( document ).ready( function( $ ) {
-    var settingsInstance = new MailgunDashboard_Settings( $ );
+    var settingsInstance = new MailgunDashboardSettings( $ );
 });

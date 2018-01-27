@@ -1,0 +1,81 @@
+#mgd-body hr {
+  margin-right: 15px;
+}
+
+.mgd-loading-section .mgd-loading-content {
+  color: #666;
+  font-size: 13px;
+  text-align: center;
+
+  &::before {
+    background: url('../img/clouding-2x.gif') center center no-repeat;
+    background-size: auto 20px;
+    content: "";
+    display: block;
+    height: 20px;
+    width: 100%;
+    position: relative;
+    left: -5px;
+  }
+}
+
+#mgd-events-table-container,
+#mgd-stats-chart,
+#mgd-date-range {
+  display: none;
+  margin: 0 15px 0 0;
+}
+
+#mgd-events-table tr {
+  cursor: pointer;
+
+  td.status {
+    width: 10px;
+  }
+
+  td.status.accepted {
+    background-color: #5da5da;
+  }
+
+  td.status.opened {
+    background-color: #407bbf;
+  }
+
+  td.status.delivered {
+    background-color: #60bd68;
+  }
+
+  td.status.unsubscribed {
+    background-color: #bf9940;
+  }
+
+  td.status.stored {
+    background-color: #2a6062;
+  }
+
+  td.status.complained {
+    background-color: #333;
+  }
+
+  td.status.clicked {
+    background-color: #386f3f;
+  }
+
+  td.status.permanent_failed {
+    background-color: #c40022;
+  }
+
+  td.status.error {
+    background-color: #c40022;
+  }
+
+  td.status.temporary_failed {
+    background-color: #ff9800;
+  }
+}
+
+.mgd-refresh-dashboard {
+  display: none;
+  float: right;
+  margin: 10px 15px;
+}

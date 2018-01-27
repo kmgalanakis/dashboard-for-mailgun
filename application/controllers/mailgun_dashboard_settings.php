@@ -57,7 +57,7 @@ class Mailgun_Dashboard_Settings {
 	 */
 	public function register_assets() {
 		wp_register_script( 'settings-js',
-			MAILGUN_DASHBOARD_URL . '/res/js/settings.js',
+			MAILGUN_DASHBOARD_URL . '/assets/js/mailgun_dashboard_settings.js',
 			array( 'jquery' ),
 			MAILGUN_DASHBOARD_VERSION,
 			true
