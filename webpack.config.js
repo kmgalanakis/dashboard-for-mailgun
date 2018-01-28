@@ -1,8 +1,12 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
 const StyleLintPlugin = require('stylelint-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+// const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const path = require( 'path' );
+
+const mgdDashboardCSSPlugin = new ExtractTextPlugin({
+    filename: './assets/css/mailgun_dashboard.css'
+});
 
 // Configuration for the ExtractTextPlugin.
 const extractConfig = {
@@ -56,15 +60,13 @@ module.exports = function( env ) {
                     },
                 },
                 {
-                    test: /\.s?css$/,
-                    use: ExtractTextPlugin.extract( extractConfig )
+                    test: /mailgun_dashboard\.s?css$/,
+                    use: mgdDashboardCSSPlugin.extract( extractConfig )
                 }
             ]
         },
         plugins: [
-            new ExtractTextPlugin({
-                filename: './assets/css/mailgun_dashboard.css'
-            }),
+            mgdDashboardCSSPlugin,
             new StyleLintPlugin({
                 syntax: 'scss'
             }),
