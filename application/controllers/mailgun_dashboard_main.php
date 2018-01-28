@@ -32,8 +32,6 @@ class Mailgun_Dashboard_Main {
 		add_action( 'init', array( $this, 'register_assets' ) );
 
 		add_action( 'init', array( $this, 'delete_mailgun_settings_source_option' ) );
-
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 	}
 
 	/**
@@ -119,20 +117,9 @@ class Mailgun_Dashboard_Main {
 		wp_register_style(
 			'mailgun_dashboard_css',
 			MAILGUN_DASHBOARD_URL . '/assets/css/mailgun_dashboard.css',
-			array(),
+			array( 'mailgun_dashboard_datatables_css', 'mailgun_dashboard_daterangepicker_css' ),
 			MAILGUN_DASHBOARD_VERSION
 		);
-	}
-
-	/**
-	 * "Mailgun Dashboard" plugin's main class assets enqueueing.
-	 */
-	public function enqueue_assets() {
-		wp_enqueue_style( 'mailgun_dashboard_datatables_css' );
-
-		wp_enqueue_style( 'mailgun_dashboard_css' );
-
-		wp_enqueue_style( 'mailgun_dashboard_daterangepicker_css' );
 	}
 
 	/**

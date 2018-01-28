@@ -124,6 +124,8 @@ class Mailgun_Dashboard_Dashboard {
 	public function enqueue_assets() {
 		if ( get_current_screen()->id === self::MAILGUN_DASHBOARD_DASHBOARD_PAGE_SCREEN_ID ) {
 			wp_enqueue_script( 'mailgun_dashboard' );
+
+			wp_enqueue_style( 'mailgun_dashboard_css' );
 		}
 	}
 
