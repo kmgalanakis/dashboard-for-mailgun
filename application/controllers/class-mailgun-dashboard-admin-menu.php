@@ -1,9 +1,9 @@
 <?php // @codingStandardsIgnoreLine
 
-namespace Controllers;
+namespace Mailgun_Dashboard\Controllers;
 
-use \Controllers\Mailgun_Dashboard_Dashboard;
-use \Controllers\Mailgun_Dashboard_Settings;
+use \Mailgun_Dashboard\Controllers\Mailgun_Dashboard_Dashboard;
+use \Mailgun_Dashboard\Controllers\Mailgun_Dashboard_Settings;
 
 /**
  * "Mailgun Dashboard" plugin's admin menu class.
@@ -38,7 +38,6 @@ class Mailgun_Dashboard_Admin_Menu {
 		$this->dashboard_page->initialize();
 
 		$this->settings_page = new Mailgun_Dashboard_Settings();
-
 		$this->settings_page->initialize();
 	}
 

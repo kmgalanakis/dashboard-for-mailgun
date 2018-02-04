@@ -1,9 +1,9 @@
 <?php // @codingStandardsIgnoreLine
 
-namespace Controllers;
+namespace Mailgun_Dashboard\Controllers;
 
-use \Controllers\Mailgun_Dashboard_Admin_Menu;
-use \Controllers\Mailgun_Dashboard_Dashboard;
+use \Mailgun_Dashboard\Controllers\Mailgun_Dashboard_Admin_Menu;
+use \Mailgun_Dashboard\Controllers\Mailgun_Dashboard_Dashboard;
 
 /**
  * "Mailgun Dashboard" plugin's main class.

@@ -499,6 +499,10 @@ var MailgunDashboardDashboard = function ($) {
         };
     };
 
+    self.removeMailgunWarning = function () {
+        $('#mailgun-warning').remove();
+    };
+
     self.init = function () {
         var range = self.setRangeStartEnd();
 
@@ -506,6 +510,7 @@ var MailgunDashboardDashboard = function ($) {
         self.getMailgunStats(range.dateRangeStart, range.dateRangeEnd);
         self.initDatePicker(range.dateRangeStart, range.dateRangeEnd);
         self.getMailgunEvents(range.dateRangeStart, range.dateRangeEnd);
+        self.removeMailgunWarning();
     };
 
     self.init();

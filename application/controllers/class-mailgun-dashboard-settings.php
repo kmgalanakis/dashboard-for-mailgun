@@ -1,6 +1,6 @@
 <?php // @codingStandardsIgnoreLine
 
-namespace Controllers;
+namespace Mailgun_Dashboard\Controllers;
 
 /**
  * "Mailgun Dashboard" plugin's settings page class.

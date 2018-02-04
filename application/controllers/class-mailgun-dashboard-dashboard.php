@@ -1,9 +1,9 @@
 <?php // @codingStandardsIgnoreLine
 
-namespace Controllers;
+namespace Mailgun_Dashboard\Controllers;
 
-use \Controllers\Mailgun_Dashboard_Settings;
-use \Controllers\Mailgun_Dashboard_Main;
+use \Mailgun_Dashboard\Controllers\Mailgun_Dashboard_Settings;
+use \Mailgun_Dashboard\Controllers\Mailgun_Dashboard_Main;
 
 /**
  * "Mailgun Dashboard" plugin's dashboard page class.
@@ -24,6 +24,8 @@ class Mailgun_Dashboard_Dashboard {
 	public function initialize() {
 
 		add_action( 'init', array( $this, 'register_assets' ), 11 );
+
+		add_action( 'current_screen', array( $this, 'maybe_display_settings_warning' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 
@@ -135,17 +137,9 @@ class Mailgun_Dashboard_Dashboard {
 	 * @since 0.1.0
 	 */
 	public function mgd_get_mailgun_dashboard_api() {
-		$defaults = array(
-			Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME => '',
-			Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME => '',
-			Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME => '',
-		);
-
-		$mailgun_dashboard_settings = wp_parse_args( get_option( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_OPTION_NAME ), $defaults );
-
 		if (
 			class_exists( 'Mailgun' )
-			&& $mailgun_dashboard_settings[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME ]
+			&& MAILGUN_DASHBOARD_SETTINGS[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME ]
 		) {
 			$mailgun_options = get_option( 'mailgun' );
 
@@ -154,9 +148,9 @@ class Mailgun_Dashboard_Dashboard {
 			$domain = isset( $mailgun_options['domain'] ) ? $mailgun_options['domain'] : '';
 
 		} else {
-			$api_key = $mailgun_dashboard_settings[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME ];
+			$api_key = MAILGUN_DASHBOARD_SETTINGS[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME ];
 
-			$domain = $mailgun_dashboard_settings[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME ];
+			$domain = MAILGUN_DASHBOARD_SETTINGS[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME ];
 		}
 
 		if (
@@ -370,5 +364,58 @@ class Mailgun_Dashboard_Dashboard {
 		return ( (string) (float) $timestamp === (string) $timestamp )
 				&& ( $timestamp <= PHP_INT_MAX )
 				&& ( $timestamp >= ~PHP_INT_MAX );
+	}
+
+	public function display_settings_warning() {
+		$show_warning = false;
+		if (
+			'' === MAILGUN_DASHBOARD_SETTINGS[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME ]
+			|| '' === MAILGUN_DASHBOARD_SETTINGS[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME ] ) {
+
+			if (
+				class_exists( 'Mailgun' )
+				&& '' !== MAILGUN_DASHBOARD_SETTINGS[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME ]
+			) {
+				$mailgun_options = get_option( 'mailgun' );
+				$api_key = isset( $mailgun_options['apiKey'] ) ? $mailgun_options['apiKey'] : '';
+				$domain = isset( $mailgun_options['domain'] ) ? $mailgun_options['domain'] : '';
+
+				$show_warning = '' === $api_key || '' === $domain ? true : false;
+			} else {
+				$show_warning = true;
+			}
+		}
+
+		return $show_warning;
+	}
+
+	/**
+	 * Maybe display a warning message is the settings of the plugin or the settings of the official Mailgun plugin are not set
+	 *
+	 * @since 0.1.0
+	 */
+	public function maybe_display_settings_warning() {
+		if (
+			$this->display_settings_warning()
+			&& ( get_current_screen()->id === self::MAILGUN_DASHBOARD_DASHBOARD_PAGE_SCREEN_ID )
+		) {
+			add_action( 'admin_notices', array( $this, 'settings_warning' ) );
+		}
+	}
+
+	/**
+	 * Render the settings message warning.
+	 *
+	 * @since 0.1.0
+	 */
+	public function settings_warning() {
+		$class = 'notice notice-warning';
+		$message = sprintf(
+			esc_html( __( 'To use Mailgun&#174; dashboard you need a valid Mailgun domain and an API Key. Get your own from your Mailgun account and insert them on %sthe settings page%s.', MAILGUN_DASHBOARD_CONTEXT ) ),
+			'<a href="' . admin_url( 'admin.php?page=mailgun-dashboard-settings' ) . '">',
+			'</a>'
+		);
+
+		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), $message );
 	}
 }
