@@ -57,5 +57,9 @@
             <button class="button button-primary js-mgd-refresh-dashboard-button"><?php echo esc_html( __( 'Refresh dashboard', MAILGUN_DASHBOARD_CONTEXT ) ); ?></button>
         </div>
         <div class="clear"></div>
+    <?php else: ?>
+        <div id="mgd-stats-chart" style="display: none !important;">
+            <canvas id="canvas"></canvas>
+        </div>
     <?php endif; ?>
 </div>

@@ -155,7 +155,9 @@ class Mailgun_Dashboard_Dashboard {
 
 		if (
 			isset( $api_key )
+			&& $api_key != ''
 			&& isset( $domain )
+			&& $domain != ''
 		) {
 			$url = sprintf( Mailgun_Dashboard_Main::MAILGUN_API_URL, $api_key, $domain );
 
