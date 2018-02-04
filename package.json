@@ -1,7 +1,7 @@
 {
-  "name": "mailgun-dashboard",
+  "name": "dashboard-for-mailgun",
   "version": "1.0.0",
-  "description": "[![Build Status](https://travis-ci.org/kmgalanakis/mailgun-dashboard.svg?branch=master)](https://travis-ci.org/kmgalanakis/mailgun-dashboard)",
+  "description": "[![Build Status](https://travis-ci.org/kmgalanakis/dashboard-for-mailgun.svg?branch=master)](https://travis-ci.org/kmgalanakis/dashboard-for-mailgun)",
   "scripts": {
     "dev": "cross-env BABEL_ENV=default webpack --watch",
     "build": "cross-env BABEL_ENV=default NODE_ENV=production webpack"
@@ -38,14 +38,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kmgalanakis/mailgun-dashboard.git"
+    "url": "git+https://github.com/kmgalanakis/dashboard-for-mailgun.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/kmgalanakis/mailgun-dashboard/issues"
+    "url": "https://github.com/kmgalanakis/dashboard-for-mailgun/issues"
   },
-  "homepage": "https://github.com/kmgalanakis/mailgun-dashboard#readme",
+  "homepage": "https://github.com/kmgalanakis/dashboard-for-mailgun#readme",
   "directories": {
     "test": "tests"
   }

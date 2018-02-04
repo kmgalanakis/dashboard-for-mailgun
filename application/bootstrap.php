@@ -1,11 +1,10 @@
 <?php // @codingStandardsIgnoreLine
 /**
- * Mailgun Dashboard plugin's main bootstrap file.
+ * Dashboard for Mailgun plugin's main bootstrap file.
  *
- * @package  mailgun-dashboard
+ * @package  dashboard-for-mailgun
  * @author   Konstantinos Galanakis
  */
-//require_once MAILGUN_DASHBOARD_PATH . '/vendor/autoload.php';
 require_once MAILGUN_DASHBOARD_PATH . '/inc/autoload.php';
 
 $mgd_main = new \Mailgun_Dashboard\Controllers\Mailgun_Dashboard_Main();

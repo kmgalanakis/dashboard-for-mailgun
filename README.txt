@@ -1,4 +1,4 @@
-=== Mailgun Dashboard ===
+=== Dashboard for Mailgun ===
 Contributors: kmgalanakis
 Donate link: https://github.com/kmgalanakis
 Tags: mailgun, dashboard, email, transactional, mail, gun
@@ -12,14 +12,13 @@ Get the statistics and the events of a Mailgun domain inside your WordPress site
 
 == Description ==
 
-Mailgun Dashboard creates an administration page that contains a graph and a table that depict the statistics and the events of the selected Mailgun domain. The plugin allows to either set the domain information internally or use the information coming from the official Mailgun plugin.
+Dashboard for Mailgun creates an administration page that contains a graph and a table that depict the statistics and the events of the selected Mailgun domain. The plugin allows to either set the domain information internally or use the information coming from the official Mailgun plugin.
 
 == Installation ==
 
-1. Upload the 'mailgun-dashboard' to the `/wp-content/plugins/` directory.
+1. Upload the 'dashboard-mailgun' to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Insert the Mailgun domain and the Mailgun API key on the settings section of the plugin or use the relevan checkbox to use the settings of the official Mailgun plugin.
-
 
 == Frequently Asked Questions ==
 
@@ -36,6 +35,10 @@ This error is related to the DNS settings of your server. Contact your host to h
 Depending on your Mailgun account type, there are certain limitations on the number of resourses you are able to access.
 
 == Screenshots ==
+1. You need a valid Mailgun Domain and an API key to use this plugin.
+2. The settings page of the plugin.
+3. The dashboard with the Mailgun stats chart for the selected domain.
+4. The dashboard with the Mailgun events table for the selected domain.
 
 == Changelog ==
 

@@ -6,18 +6,18 @@ use \Mailgun_Dashboard\Controllers\Mailgun_Dashboard_Settings;
 use \Mailgun_Dashboard\Controllers\Mailgun_Dashboard_Main;
 
 /**
- * "Mailgun Dashboard" plugin's dashboard page class.
+ * "Dashboard for Mailgun" plugin's dashboard page class.
  *
  * @category Class
- * @package  mailgun-dashboard
+ * @package  dashboard-for-mailgun
  * @author   Konstantinos Galanakis
  */
 class Mailgun_Dashboard_Dashboard {
 
-	const MAILGUN_DASHBOARD_DASHBOARD_PAGE_SCREEN_ID = 'toplevel_page_mailgun-dashboard';
+	const MAILGUN_DASHBOARD_DASHBOARD_PAGE_SCREEN_ID = 'toplevel_page_dashboard-for-mailgun';
 
 	/**
-	 * Initialize "Mailgun Dashboard" plugin's dashboard page.
+	 * Initialize "Dashboard for Mailgun" plugin's dashboard page.
 	 *
 	 * @since 0.1.0
 	 */
@@ -41,7 +41,7 @@ class Mailgun_Dashboard_Dashboard {
 	}
 
 	/**
-	 * "Mailgun Dashboard" plugin's dashboard menu page callback.
+	 * "Dashboard for Mailgun" plugin's dashboard menu page callback.
 	 *
 	 * @since 0.1.0
 	 */
@@ -52,7 +52,7 @@ class Mailgun_Dashboard_Dashboard {
 	}
 
 	/**
-	 * Register "Mailgun Dashboard" plugin's dashboard assets.
+	 * Register "Dashboard for Mailgun" plugin's dashboard assets.
 	 *
 	 * @since 0.1.0
 	 */
@@ -121,7 +121,7 @@ class Mailgun_Dashboard_Dashboard {
 	}
 
 	/**
-	 * Enqueue "Mailgun Dashboard" plugin's dashboard assets.
+	 * Enqueue "Dashboard for Mailgun" plugin's dashboard assets.
 	 */
 	public function enqueue_assets() {
 		if ( get_current_screen()->id === self::MAILGUN_DASHBOARD_DASHBOARD_PAGE_SCREEN_ID ) {
@@ -155,9 +155,9 @@ class Mailgun_Dashboard_Dashboard {
 
 		if (
 			isset( $api_key )
-			&& $api_key != ''
+			&& '' != $api_key
 			&& isset( $domain )
-			&& $domain != ''
+			&& '' != $domain
 		) {
 			$url = sprintf( Mailgun_Dashboard_Main::MAILGUN_API_URL, $api_key, $domain );
 
@@ -368,6 +368,13 @@ class Mailgun_Dashboard_Dashboard {
 				&& ( $timestamp >= ~PHP_INT_MAX );
 	}
 
+	/**
+	 * Check whethre to display a warning about missing settings or not.
+	 *
+	 * @return bool
+	 *
+	 * @since 0.1.0
+	 */
 	public function display_settings_warning() {
 		$show_warning = false;
 		if (
@@ -379,7 +386,9 @@ class Mailgun_Dashboard_Dashboard {
 				&& '' !== MAILGUN_DASHBOARD_SETTINGS[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME ]
 			) {
 				$mailgun_options = get_option( 'mailgun' );
+
 				$api_key = isset( $mailgun_options['apiKey'] ) ? $mailgun_options['apiKey'] : '';
+
 				$domain = isset( $mailgun_options['domain'] ) ? $mailgun_options['domain'] : '';
 
 				$show_warning = '' === $api_key || '' === $domain ? true : false;
@@ -412,9 +421,10 @@ class Mailgun_Dashboard_Dashboard {
 	 */
 	public function settings_warning() {
 		$class = 'notice notice-warning';
+
 		$message = sprintf(
-			esc_html( __( 'To use Mailgun&#174; dashboard you need a valid Mailgun domain and an API Key. Get your own from your Mailgun account and insert them on %sthe settings page%s.', MAILGUN_DASHBOARD_CONTEXT ) ),
-			'<a href="' . admin_url( 'admin.php?page=mailgun-dashboard-settings' ) . '">',
+			esc_html( __( 'To use Dashboard for Mailgun you need a valid Mailgun domain and an API Key. Get your own from your Mailgun account and insert them on %1sthe settings page%2s.', MAILGUN_DASHBOARD_CONTEXT ) ), // @codingStandardsIgnoreLine
+			'<a href="' . admin_url( 'admin.php?page=dashboard-for-mailgun-settings' ) . '">',
 			'</a>'
 		);
 

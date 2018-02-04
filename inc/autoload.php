@@ -41,7 +41,8 @@ function mailgun_dashboard_autoload( $class_name ) {
 		// If we're at the first entry, then we're at the filename.
 		if ( count( $file_parts ) - 1 === $i ) {
 
-			/* If 'interface' is contained in the parts of the file name, then
+			/**
+			 * If 'interface' is contained in the parts of the file name, then
 			 * define the $file_name differently so that it's properly loaded.
 			 * Otherwise, just set the $file_name equal to that of the class
 			 * filename structure.

@@ -11,7 +11,7 @@ $mailgun_dashboard_settings = wp_parse_args( get_option( Mailgun_Dashboard_Setti
 ?>
 
 <div class="wrap">
-    <h1><?php echo esc_html( __( 'Mailgun&#174; Dashboard Settings', MAILGUN_DASHBOARD_CONTEXT ) ); ?></h1>
+    <h1><?php echo esc_html( __( 'Dashboard for Mailgun Settings', MAILGUN_DASHBOARD_CONTEXT ) ); ?></h1>
 
     <form method="post" action="options.php">
         <?php echo settings_fields( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_OPTIONS_GROUP ); ?>

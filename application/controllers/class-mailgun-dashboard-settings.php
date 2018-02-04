@@ -3,10 +3,10 @@
 namespace Mailgun_Dashboard\Controllers;
 
 /**
- * "Mailgun Dashboard" plugin's settings page class.
+ * "Dashboard for Mailgun" plugin's settings page class.
  *
  * @category Class
- * @package  mailgun-dashboard
+ * @package  dashboard-for-mailgun
  * @author   Konstantinos Galanakis
  */
 class Mailgun_Dashboard_Settings {
@@ -21,10 +21,10 @@ class Mailgun_Dashboard_Settings {
 
 	const MAILGUN_DASHBOARD_OPTIONS_GROUP = 'mailgun_dashboard_options_group';
 
-	const MAILGUN_DASHBOARD_SETTINGS_PAGE_SCREEN_ID = 'mailgun-dashboard_page_mailgun-dashboard-settings';
+	const MAILGUN_DASHBOARD_SETTINGS_PAGE_SCREEN_ID = 'dashboard-for-mailgun_page_dashboard-for-mailgun-settings';
 
 	/**
-	 * Initialize "Mailgun Dashboard" plugin's settings page.
+	 * Initialize "Dashboard for Mailgun" plugin's settings page.
 	 */
 	public function initialize() {
 		add_action( 'admin_init', array( $this, 'mailgun_dashboard_register_settings' ) );
@@ -35,14 +35,14 @@ class Mailgun_Dashboard_Settings {
 	}
 
 	/**
-	 * Register the settings for the "Mailgun Dashboard" plugin.
+	 * Register the settings for the "Dashboard for Mailgun" plugin.
 	 */
 	public function mailgun_dashboard_register_settings() {
 		register_setting( self::MAILGUN_DASHBOARD_OPTIONS_GROUP, self::MAILGUN_DASHBOARD_OPTION_NAME, array( $this, 'mailgun_api_key_validation' ) );
 	}
 
 	/**
-	 * "Mailgun Dashboard" plugin's settings menu page callback.
+	 * "Dashboard for Mailgun" plugin's settings menu page callback.
 	 */
 	public function render_page() {
 		ob_start();
@@ -51,7 +51,7 @@ class Mailgun_Dashboard_Settings {
 	}
 
 	/**
-	 * Register "Mailgun Dashboard" plugin's settings assets.
+	 * Register "Dashboard for Mailgun" plugin's settings assets.
 	 *
 	 * @since 0.1.0
 	 */
@@ -73,7 +73,7 @@ class Mailgun_Dashboard_Settings {
 	}
 
 	/**
-	 * Enqueue "Mailgun Dashboard" plugin's settings assets.
+	 * Enqueue "Dashboard for Mailgun" plugin's settings assets.
 	 */
 	public function enqueue_assets() {
 		if ( get_current_screen()->id === self::MAILGUN_DASHBOARD_SETTINGS_PAGE_SCREEN_ID ) {

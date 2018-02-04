@@ -6,10 +6,10 @@ use \Mailgun_Dashboard\Controllers\Mailgun_Dashboard_Admin_Menu;
 use \Mailgun_Dashboard\Controllers\Mailgun_Dashboard_Dashboard;
 
 /**
- * "Mailgun Dashboard" plugin's main class.
+ * "Dashboard for Mailgun" plugin's main class.
  *
  * @category Class
- * @package  mailgun-dashboard
+ * @package  dashboard-for-mailgun
  * @author   Konstantinos Galanakis
  */
 class Mailgun_Dashboard_Main {
@@ -17,14 +17,14 @@ class Mailgun_Dashboard_Main {
 	const MAILGUN_API_URL = 'https://api:%s@api.mailgun.net/v3/%s';
 
 	/**
-	 * "Mailgun Dashboard" plugin's main class initialization.
+	 * "Dashboard for Mailgun" plugin's main class initialization.
 	 */
 	public function initialize() {
 		$this->add_hooks();
 	}
 
 	/**
-	 * "Mailgun Dashboard" plugin's main class hooks initialization.
+	 * "Dashboard for Mailgun" plugin's main class hooks initialization.
 	 */
 	public function add_hooks() {
 		add_action( 'init', array( $this, 'initialize_classes' ) );
@@ -35,7 +35,7 @@ class Mailgun_Dashboard_Main {
 	}
 
 	/**
-	 * "Mailgun Dashboard" plugin's various secondary classes initialization.
+	 * "Dashboard for Mailgun" plugin's various secondary classes initialization.
 	 */
 	public function initialize_classes() {
 		$mgd_admin_menu = new Mailgun_Dashboard_Admin_Menu();
@@ -43,7 +43,7 @@ class Mailgun_Dashboard_Main {
 	}
 
 	/**
-	 * "Mailgun Dashboard" plugin's main class assets registration.
+	 * "Dashboard for Mailgun" plugin's main class assets registration.
 	 */
 	public function register_assets() {
 		wp_register_script(
@@ -123,7 +123,7 @@ class Mailgun_Dashboard_Main {
 	}
 
 	/**
-	 * "Mailgun Dashboard" plugin's method to remove the Mailgun source settings option from the database when
+	 * "Dashboard for Mailgun" plugin's method to remove the Mailgun source settings option from the database when
 	 * the Mailgun plugin is not activated.
 	 */
 	public function delete_mailgun_settings_source_option() {
