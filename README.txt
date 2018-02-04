@@ -37,12 +37,10 @@ Depending on your Mailgun account type, there are certain limitations on the num
 
 == Screenshots ==
 
-1. GitStatusPress admin toolbar view.
-
 == Changelog ==
 
 = 1.0 =
-* Release date: 2018-12-22
+* Release date: 2018-02-04
 * Initial release.
 
 == Upgrade Notice ==
