@@ -30,6 +30,6 @@ Dashboard for Mailgun creates an administration page that contains a graph and a
 
 ## Changelog
 
-* __1.0__
-    * Release date: 2018-12-22
+* __0.1.0__
+    * Release date: 2018-02-04
     * Initial release.

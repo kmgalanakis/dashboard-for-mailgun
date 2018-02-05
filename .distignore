@@ -8,6 +8,7 @@
 .stylelintrc
 .travis.yml
 .DS_Store
+.idea
 Thumbs.db
 behat.yml
 bin

@@ -37,7 +37,7 @@ class Mailgun_Dashboard_Dashboard {
 			Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME => '',
 		);
 
-		define( 'MAILGUN_DASHBOARD_SETTINGS', wp_parse_args( get_option( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_OPTION_NAME ), $defaults ) );
+		define( 'MAILGUN_DASHBOARD_SETTINGS', serialize( wp_parse_args( get_option( Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_OPTION_NAME ), $defaults ) ) );
 	}
 
 	/**
@@ -63,6 +63,8 @@ class Mailgun_Dashboard_Dashboard {
 			MAILGUN_DASHBOARD_VERSION,
 			true
 		);
+
+		$mailgun_dashboard_settings = unserialize( MAILGUN_DASHBOARD_SETTINGS );
 
 		//@codingStandardsIgnoreStart
 		$dashboard_script_texts = array(
@@ -101,7 +103,7 @@ class Mailgun_Dashboard_Dashboard {
 				'account_disabled' => __( 'Account disabled', MAILGUN_DASHBOARD_CONTEXT ),
 			),
 			'chartTitle' => __( 'Domain', MAILGUN_DASHBOARD_CONTEXT ) .
-			                ' "' .  MAILGUN_DASHBOARD_SETTINGS[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME ] . '" '
+			                ' "' .  $mailgun_dashboard_settings[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME ] . '" '
 			                . __( 'chart', MAILGUN_DASHBOARD_CONTEXT ),
 			'mailgun_api_failed' => __( 'Mailgun API failed', MAILGUN_DASHBOARD_CONTEXT ),
 			'console_for_info' => __( 'See the console for further information', MAILGUN_DASHBOARD_CONTEXT ),
@@ -137,9 +139,10 @@ class Mailgun_Dashboard_Dashboard {
 	 * @since 0.1.0
 	 */
 	public function mgd_get_mailgun_dashboard_api() {
+		$mailgun_dashboard_settings = unserialize( MAILGUN_DASHBOARD_SETTINGS );
 		if (
 			class_exists( 'Mailgun' )
-			&& MAILGUN_DASHBOARD_SETTINGS[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME ]
+			&& $mailgun_dashboard_settings[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME ]
 		) {
 			$mailgun_options = get_option( 'mailgun' );
 
@@ -148,9 +151,9 @@ class Mailgun_Dashboard_Dashboard {
 			$domain = isset( $mailgun_options['domain'] ) ? $mailgun_options['domain'] : '';
 
 		} else {
-			$api_key = MAILGUN_DASHBOARD_SETTINGS[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME ];
+			$api_key = $mailgun_dashboard_settings[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME ];
 
-			$domain = MAILGUN_DASHBOARD_SETTINGS[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME ];
+			$domain = $mailgun_dashboard_settings[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME ];
 		}
 
 		if (
@@ -376,14 +379,16 @@ class Mailgun_Dashboard_Dashboard {
 	 * @since 0.1.0
 	 */
 	public function display_settings_warning() {
+		$mailgun_dashboard_settings = unserialize( MAILGUN_DASHBOARD_SETTINGS );
+
 		$show_warning = false;
 		if (
-			'' === MAILGUN_DASHBOARD_SETTINGS[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME ]
-			|| '' === MAILGUN_DASHBOARD_SETTINGS[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME ] ) {
+			'' === $mailgun_dashboard_settings[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_DOMAIN_OPTION_NAME ]
+			|| '' === $mailgun_dashboard_settings[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_API_KEY_OPTION_NAME ] ) {
 
 			if (
 				class_exists( 'Mailgun' )
-				&& '' !== MAILGUN_DASHBOARD_SETTINGS[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME ]
+				&& '' !== $mailgun_dashboard_settings[ Mailgun_Dashboard_Settings::MAILGUN_DASHBOARD_SETTINGS_SOURCE_NAME ]
 			) {
 				$mailgun_options = get_option( 'mailgun' );
 

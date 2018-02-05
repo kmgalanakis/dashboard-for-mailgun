@@ -42,11 +42,11 @@ Depending on your Mailgun account type, there are certain limitations on the num
 
 == Changelog ==
 
-= 1.0 =
+= 0.1.0 =
 * Release date: 2018-02-04
 * Initial release.
 
 == Upgrade Notice ==
 
-= 1.0 =
+= 0.1.0 =
 Initial release.
